@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"flag"
 	"fmt"
@@ -48,7 +49,13 @@ func makeSomeNoise() {
 }
 
 func readUntilClosed(r io.Reader) {
-	io.Copy(os.Stdout, r)
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
 }
 
 func startChild(ctx context.Context, i int, stdout, stderr io.WriteCloser) {
