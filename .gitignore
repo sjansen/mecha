@@ -1,0 +1,12 @@
+# Directories
+/dist/
+/vendor/
+/webui/elm-stuff/
+/webui/node_modules/
+
+# Files
+/mecha
+.DS_Store
+
+# Patterns
+.*.sw[op]
