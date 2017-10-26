@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/chzyer/readline"
+  packages = ["."]
+  revision = "62c6fe6193755f722b8b8788aa7357be55a50ff1"
+  version = "v1.4"
+
+[[projects]]
   branch = "master"
   name = "github.com/google/skylark"
   packages = [".","resolve","syntax"]
@@ -10,6 +16,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "de3c898a2f292e1ba311e1ade22f8cad2f0ae267ba68b3b60eb06e50682454b1"
+  inputs-digest = "3078725da3e77d820d711d5994b6a30e17c51341e36255cf72d1dd6d399091ca"
   solver-name = "gps-cdcl"
   solver-version = 1
