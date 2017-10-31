@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/beevik/ntp"
+  packages = ["."]
+  revision = "62c80a04de2086884d8296004b6d74ee1846c582"
+  version = "v0.2.0"
+
+[[projects]]
   name = "github.com/chzyer/readline"
   packages = ["."]
   revision = "62c6fe6193755f722b8b8788aa7357be55a50ff1"
@@ -13,9 +19,15 @@
   packages = [".","resolve","syntax"]
   revision = "cd5b9eb035ea43240e3cabd28e87afab5dee5000"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["bpf","internal/iana","internal/socket","ipv4"]
+  revision = "c73622c77280266305273cb545f54516ced95b93"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3078725da3e77d820d711d5994b6a30e17c51341e36255cf72d1dd6d399091ca"
+  inputs-digest = "5ba20a05cc57fbd639cca562b22a89d1feb73dde036e9a828ee39c2a95b48974"
   solver-name = "gps-cdcl"
   solver-version = 1
