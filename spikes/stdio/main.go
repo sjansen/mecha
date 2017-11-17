@@ -43,8 +43,8 @@ func makeSomeNoise() {
 	for i := 1; i <= max_count; i += 1 {
 		sleep := rand.Intn(max_sleep-min_sleep) + min_sleep
 		time.Sleep(time.Duration(sleep) * time.Millisecond)
-		fmt.Fprintln(os.Stdout, id, i)
-		fmt.Fprintln(os.Stderr, id, i)
+		fmt.Fprintln(os.Stdout, id, i, "stdout")
+		fmt.Fprintln(os.Stderr, id, i, "stderr")
 	}
 }
 
@@ -56,6 +56,21 @@ func readUntilClosed(r io.Reader) {
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
+}
+
+func startReader(i int, wg *sync.WaitGroup) (io.WriteCloser, error) {
+	r, w, err := os.Pipe()
+	if err != nil {
+		return nil, err
+	}
+
+	wg.Add(1)
+	go func(i int, r io.Reader) {
+		defer wg.Done()
+		readUntilClosed(r)
+	}(i, r)
+
+	return w, nil
 }
 
 func startChild(ctx context.Context, i int, stdout, stderr io.WriteCloser) {
@@ -94,29 +109,15 @@ func startChildren() {
 
 	wg := &sync.WaitGroup{}
 	for i := 1; i <= children; i += 1 {
-		r, stdout, err := os.Pipe()
+		stdout, err := startReader(i, wg)
 		if err != nil {
 			die(err)
 		}
 
-		wg.Add(1)
-		go func(i int, r io.Reader) {
-			defer wg.Done()
-			readUntilClosed(r)
-			fmt.Fprintln(os.Stderr, "stdout:", i)
-		}(i, r)
-
-		r, stderr, err := os.Pipe()
+		stderr, err := startReader(i, wg)
 		if err != nil {
 			die(err)
 		}
-
-		wg.Add(1)
-		go func(i int, r io.Reader) {
-			defer wg.Done()
-			readUntilClosed(r)
-			fmt.Fprintln(os.Stderr, "stderr:", i)
-		}(i, r)
 
 		wg.Add(1)
 		go func(i int, stdout, stderr io.WriteCloser) {
