@@ -17,3 +17,7 @@
 [[constraint]]
   name = "github.com/rivo/tview"
   revision = "213c37c368f62e3a1a81f5c6dc3d2ce054d206af"
+
+[[constraint]]
+  name = "google.golang.org/grpc"
+  version = "1.11.3"

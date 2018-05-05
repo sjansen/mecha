@@ -1,0 +1,1 @@
+protoc -I translate/ translate/translate.proto --go_out=plugins=grpc:translate
