@@ -122,6 +122,21 @@
   version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/gdamore/encoding"
+  packages = ["."]
+  revision = "b23993cbb6353f0e6aa98d0ee318a34728f628b9"
+
+[[projects]]
+  name = "github.com/gdamore/tcell"
+  packages = [
+    ".",
+    "terminfo"
+  ]
+  revision = "061d51a604c546b48e92253cb65190d76cecf4c6"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/go-ole/go-ole"
   packages = [
     ".",
@@ -159,6 +174,12 @@
   version = "0.4"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/lucasb-eyer/go-colorful"
+  packages = ["."]
+  revision = "231272389856c976b7500c4fffcc52ddf06ff4eb"
+
+[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -169,6 +190,12 @@
   packages = ["."]
   revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
   version = "v0.0.3"
+
+[[projects]]
+  name = "github.com/mattn/go-runewidth"
+  packages = ["."]
+  revision = "9e777a8366cce605130a531d2cd6363d07ad7317"
+  version = "v0.0.2"
 
 [[projects]]
   branch = "master"
@@ -211,6 +238,11 @@
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
+
+[[projects]]
+  name = "github.com/rivo/tview"
+  packages = ["."]
+  revision = "213c37c368f62e3a1a81f5c6dc3d2ce054d206af"
 
 [[projects]]
   name = "github.com/sergi/go-diff"
@@ -298,6 +330,8 @@
 [[projects]]
   name = "golang.org/x/text"
   packages = [
+    "encoding",
+    "encoding/internal/identifier",
     "internal/gen",
     "internal/triegen",
     "internal/ucd",
@@ -376,6 +410,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "472fb5518ff289404f49f7d98b807bc7561e18d4ac42371d17b3ff2ad283249d"
+  inputs-digest = "ce4dc92895d4f04c65a268504820eb9e522a89e8cc78f18b08625e8cf74c5910"
   solver-name = "gps-cdcl"
   solver-version = 1

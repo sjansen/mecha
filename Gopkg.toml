@@ -13,3 +13,7 @@
 [[constraint]]
   name = "github.com/google/skylark"
   revision = "06804d924f8f4f36e25d858d0eb0bab8e1c8bc80"
+
+[[constraint]]
+  name = "github.com/rivo/tview"
+  revision = "213c37c368f62e3a1a81f5c6dc3d2ce054d206af"
