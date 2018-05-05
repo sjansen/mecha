@@ -63,9 +63,9 @@ func main() {
 		l.SetPrompt(PS1)
 		l.SaveHistory(buffer)
 
-		_, err = syntax.ParseExpr("<stdin>", line)
+		_, err = syntax.ParseExpr("<stdin>", line, 0)
 		if err != nil {
-			if err := skylark.ExecFile(thread, "<stdin>", buffer, globals); err != nil {
+			if _, err := skylark.ExecFile(thread, "<stdin>", buffer, globals); err != nil {
 				fmt.Println(err)
 			}
 		} else {

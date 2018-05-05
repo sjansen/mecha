@@ -22,9 +22,8 @@ c = sqrt(float(a*a + b*b))
 `
 
 func load(_ *skylark.Thread, module string) (skylark.StringDict, error) {
-	globals := skylark.StringDict{}
 	thread := &skylark.Thread{Load: load}
-	err := skylark.ExecFile(thread, module, files[module], globals)
+	globals, err := skylark.ExecFile(thread, module, files[module], nil)
 	return globals, err
 }
 
@@ -43,12 +42,10 @@ func main() {
 	globals := skylark.StringDict{
 		"sqrt": skylark.NewBuiltin("sqrt", sqrt),
 	}
-	thread := &skylark.Thread{
-		Load: load,
-	}
-	if err := skylark.ExecFile(thread, "<stdin>", script, globals); err != nil {
+	thread := &skylark.Thread{Load: load}
+	if result, err := skylark.ExecFile(thread, "<stdin>", script, globals); err != nil {
 		fmt.Fprintln(os.Stderr, err)
+	} else {
+		fmt.Println(result["c"])
 	}
-
-	fmt.Println(globals["c"])
 }

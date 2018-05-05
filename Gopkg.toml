@@ -1,12 +1,15 @@
-
 [[constraint]]
   name = "github.com/fatih/color"
   version = "v1.6.0"
 
 [[constraint]]
   name = "github.com/fsouza/go-dockerclient"
-  version = "1.0.0"
+  version = "1.2.0"
 
 [[constraint]]
   name = "gopkg.in/src-d/go-git.v4"
-  version = "v4.0.0-rc15"
+  version = "v4.3.1"
+
+[[constraint]]
+  name = "github.com/google/skylark"
+  revision = "06804d924f8f4f36e25d858d0eb0bab8e1c8bc80"
