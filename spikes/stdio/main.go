@@ -12,6 +12,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 const children = 3
@@ -48,27 +50,28 @@ func makeSomeNoise() {
 	}
 }
 
-func readUntilClosed(r io.Reader) {
+func readUntilClosed(c *color.Color, r io.Reader) {
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+		text := c.Sprint(scanner.Text())
+		fmt.Println(text)
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 }
 
-func startReader(i int, wg *sync.WaitGroup) (io.WriteCloser, error) {
+func startReader(c *color.Color, wg *sync.WaitGroup) (io.WriteCloser, error) {
 	r, w, err := os.Pipe()
 	if err != nil {
 		return nil, err
 	}
 
 	wg.Add(1)
-	go func(i int, r io.Reader) {
+	go func(r io.Reader) {
 		defer wg.Done()
-		readUntilClosed(r)
-	}(i, r)
+		readUntilClosed(c, r)
+	}(r)
 
 	return w, nil
 }
@@ -107,14 +110,17 @@ func startChildren() {
 	)
 	defer cancel()
 
+	green := color.New(color.FgGreen)
+	red := color.New(color.FgRed)
+
 	wg := &sync.WaitGroup{}
 	for i := 1; i <= children; i += 1 {
-		stdout, err := startReader(i, wg)
+		stdout, err := startReader(green, wg)
 		if err != nil {
 			die(err)
 		}
 
-		stderr, err := startReader(i, wg)
+		stderr, err := startReader(red, wg)
 		if err != nil {
 			die(err)
 		}
