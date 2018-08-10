@@ -99,8 +99,12 @@ func search(head *object.Commit, path string, target plumbing.Hash) (*object.Com
 }
 
 func main() {
-	repo := os.Args[1]
-	path := os.Args[2]
+	repo := "."
+	path := "spikes"
+	if len(os.Args) > 2 {
+		repo = os.Args[1]
+		path = os.Args[2]
+	}
 	path = strings.TrimSuffix(path, "/")
 
 	head, err := open(repo)
