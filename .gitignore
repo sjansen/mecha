@@ -3,10 +3,13 @@
 /vendor/
 /webui/elm-stuff/
 /webui/node_modules/
+.pytest_cache/
+venv/
 
 # Files
 /mecha
 .DS_Store
 
 # Patterns
+*.py[co]
 .*.sw[op]
