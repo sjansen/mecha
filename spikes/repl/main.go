@@ -10,8 +10,8 @@ import (
 	"github.com/google/skylark/syntax"
 )
 
-const PS1 = "> "
-const PS2 = ": "
+const ps1 = "> "
+const ps2 = ": "
 
 var completer = readline.NewPrefixCompleter(
 	readline.PcItem("print"),
@@ -24,7 +24,7 @@ func main() {
 		EOFPrompt:              "exit",
 		HistoryFile:            "/tmp/readline.tmp",
 		InterruptPrompt:        "^C",
-		Prompt:                 PS1,
+		Prompt:                 ps1,
 	})
 	if err != nil {
 		panic(err)
@@ -54,13 +54,13 @@ func main() {
 		case strings.HasPrefix(line, " "):
 			continue
 		case strings.HasSuffix(line, ":"):
-			l.SetPrompt(PS2)
+			l.SetPrompt(ps2)
 			continue
 		}
 
 		buffer := strings.Join(lines, "\n")
 		lines = lines[:0]
-		l.SetPrompt(PS1)
+		l.SetPrompt(ps1)
 		l.SaveHistory(buffer)
 
 		_, err = syntax.ParseExpr("<stdin>", line, 0)

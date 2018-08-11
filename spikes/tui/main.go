@@ -10,13 +10,13 @@ import (
 	"github.com/rivo/tview"
 )
 
-var BOXES = []string{"foo", "bar", "baz", "qux", "quux", "corge"}
+var boxes = []string{"foo", "bar", "baz", "qux", "quux", "corge"}
 
 func addView() *tview.TextView {
 	textView := tview.NewTextView().
 		SetDynamicColors(true)
 	go func() {
-		for i := 1; i <= 25; i += 1 {
+		for i := 1; i <= 25; i++ {
 			if i%10 == 0 {
 				fmt.Fprintf(textView, "[red::r]line #%d[-:-:-]\n", i)
 			} else {
@@ -44,7 +44,7 @@ func main() {
 
 	flex := tview.NewFlex().
 		SetDirection(tview.FlexRow)
-	for _, title := range BOXES {
+	for _, title := range boxes {
 		textView := addView().
 			SetChangedFunc(func() {
 				app.Draw()

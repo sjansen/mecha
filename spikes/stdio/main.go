@@ -17,9 +17,9 @@ import (
 )
 
 const children = 3
-const max_count = 3
-const max_sleep = 500
-const min_sleep = 100
+const maxCount = 3
+const maxSleep = 500
+const minSleep = 100
 
 var id int
 
@@ -42,8 +42,8 @@ func die(err error) {
 }
 
 func makeSomeNoise() {
-	for i := 1; i <= max_count; i += 1 {
-		sleep := rand.Intn(max_sleep-min_sleep) + min_sleep
+	for i := 1; i <= maxCount; i++ {
+		sleep := rand.Intn(maxSleep-minSleep) + minSleep
 		time.Sleep(time.Duration(sleep) * time.Millisecond)
 		fmt.Fprintln(os.Stdout, id, i, "stdout")
 		fmt.Fprintln(os.Stderr, id, i, "stderr")
@@ -101,12 +101,12 @@ func startChild(ctx context.Context, i int, stdout, stderr io.WriteCloser) {
 func startChildren() {
 	fmt.Fprintln(os.Stderr, "parent:", os.Getpid())
 
-	max_time := max_count*max_sleep + 1000
-	fmt.Fprintln(os.Stderr, "max time:", max_time)
+	maxTime := maxCount*maxSleep + 1000
+	fmt.Fprintln(os.Stderr, "max time:", maxTime)
 
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		time.Duration(max_time)*time.Millisecond,
+		time.Duration(maxTime)*time.Millisecond,
 	)
 	defer cancel()
 
@@ -114,7 +114,7 @@ func startChildren() {
 	red := color.New(color.FgRed)
 
 	wg := &sync.WaitGroup{}
-	for i := 1; i <= children; i += 1 {
+	for i := 1; i <= children; i++ {
 		stdout, err := startReader(green, wg)
 		if err != nil {
 			die(err)
