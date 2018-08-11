@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -24,9 +25,38 @@ func die(err error) {
 	os.Exit(1)
 }
 
+func adjust(repo, path string) (root, file string) {
+	root = repo
+	file = path
+	if repo, err := filepath.Abs(repo); err == nil {
+		for {
+			subdir := filepath.Join(repo, git.GitDirName)
+			if x, err := os.Stat(subdir); os.IsNotExist(err) {
+				basename := filepath.Base(repo)
+				dirname := filepath.Dir(repo)
+				if dirname == repo {
+					return
+				}
+				repo = dirname
+				path = filepath.Join(basename, path)
+			} else if err == nil && x.IsDir() {
+				root = repo
+				file = path
+				return
+			}
+		}
+	}
+	return
+}
+
 func check(commit *object.Commit, path string) (h plumbing.Hash, err error) {
 	tree, err := commit.Tree()
 	if err != nil {
+		return
+	}
+
+	if path == "." {
+		h = tree.Hash
 		return
 	}
 
@@ -100,12 +130,15 @@ func search(head *object.Commit, path string, target plumbing.Hash) (*object.Com
 
 func main() {
 	repo := "."
-	path := "spikes"
-	if len(os.Args) > 2 {
+	path := "."
+	if len(os.Args) > 1 {
 		repo = os.Args[1]
-		path = os.Args[2]
 	}
-	path = strings.TrimSuffix(path, "/")
+	if len(os.Args) > 2 {
+		path = strings.TrimSuffix(os.Args[2], "/")
+	}
+
+	repo, path = adjust(repo, path)
 
 	head, err := open(repo)
 	if err != nil {
