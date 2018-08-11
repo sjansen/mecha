@@ -49,7 +49,8 @@ func main() {
 			SetChangedFunc(func() {
 				app.Draw()
 			})
-		textView.SetBorder(true).
+		textView.
+			SetBorder(true).
 			SetTitle(title).
 			SetTitleAlign(tview.AlignLeft)
 		flex.AddItem(textView, 0, 1, false)

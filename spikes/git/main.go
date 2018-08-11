@@ -86,7 +86,7 @@ func open(path string) (c *object.Commit, err error) {
 
 func search(head *object.Commit, path string, target plumbing.Hash) (*object.Commit, error) {
 	seen := map[plumbing.Hash]struct{}{
-		head.Hash: struct{}{},
+		head.Hash: {},
 	}
 	stack := []*object.Commit{head}
 	leafs := []*object.Commit{}
