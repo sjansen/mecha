@@ -9,7 +9,7 @@ import (
 type step struct {
 	write  []byte
 	buffer *Buffer
-	lines  [][]byte
+	lines  []string
 }
 
 func TestBuffer(t *testing.T) {
@@ -17,39 +17,119 @@ func TestBuffer(t *testing.T) {
 
 	b := &Buffer{}
 	for _, step := range []step{
-		step{
+		{
 			write: []byte("foo\n"),
 			buffer: &Buffer{
-				lines: []int{4},
-				text:  []byte("foo\n"),
+				tmp: nil,
+				lines: []string{
+					"foo\n",
+				},
 			},
-			lines: [][]byte{
-				[]byte("foo\n"),
+			lines: []string{
+				"foo\n",
 			},
 		},
-		step{
+		{
 			write: []byte("bar\nbaz"),
 			buffer: &Buffer{
-				lines: []int{4, 8},
-				text:  []byte("foo\nbar\nbaz"),
+				tmp: []byte("baz"),
+				lines: []string{
+					"foo\n", "bar\n",
+				},
 			},
-			lines: [][]byte{
-				[]byte("foo\n"),
-				[]byte("bar\n"),
-				[]byte("baz"),
+			lines: []string{
+				"foo\n", "bar\n",
 			},
 		},
-		step{
+		{
 			write: []byte("\nqux\n"),
 			buffer: &Buffer{
-				lines: []int{4, 8, 12, 16},
-				text:  []byte("foo\nbar\nbaz\nqux\n"),
+				tmp: []byte{},
+				lines: []string{
+					"foo\n", "bar\n", "baz\n",
+					"qux\n",
+				},
 			},
-			lines: [][]byte{
-				[]byte("foo\n"),
-				[]byte("bar\n"),
-				[]byte("baz\n"),
-				[]byte("qux\n"),
+			lines: []string{
+				"foo\n", "bar\n", "baz\n",
+				"qux\n",
+			},
+		},
+		{
+			write: []byte("qu"),
+			buffer: &Buffer{
+				tmp: []byte("qu"),
+				lines: []string{
+					"foo\n", "bar\n", "baz\n",
+					"qux\n",
+				},
+			},
+			lines: []string{
+				"foo\n", "bar\n", "baz\n", "qux\n",
+			},
+		},
+		{
+			write: []byte("ux\ncorge"),
+			buffer: &Buffer{
+				tmp: []byte("corge"),
+				lines: []string{
+					"foo\n", "bar\n", "baz\n",
+					"qux\n", "quux\n",
+				},
+			},
+			lines: []string{
+				"foo\n", "bar\n", "baz\n",
+				"qux\n", "quux\n",
+			},
+		},
+		{
+			write: []byte("\ngrault\ngarply\nwaldo\nf"),
+			buffer: &Buffer{
+				tmp: []byte("f"),
+				lines: []string{
+					"foo\n", "bar\n", "baz\n",
+					"qux\n", "quux\n", "corge\n",
+					"grault\n", "garply\n", "waldo\n",
+				},
+			},
+			lines: []string{
+				"foo\n", "bar\n", "baz\n",
+				"qux\n", "quux\n", "corge\n",
+				"grault\n", "garply\n", "waldo\n",
+			},
+		},
+		{
+			write: []byte("re"),
+			buffer: &Buffer{
+				tmp: []byte("fre"),
+				lines: []string{
+					"foo\n", "bar\n", "baz\n",
+					"qux\n", "quux\n", "corge\n",
+					"grault\n", "garply\n", "waldo\n",
+				},
+			},
+			lines: []string{
+				"foo\n", "bar\n", "baz\n",
+				"qux\n", "quux\n", "corge\n",
+				"grault\n", "garply\n", "waldo\n",
+			},
+		},
+		{
+			write: []byte("d\n"),
+			buffer: &Buffer{
+				tmp: []byte{},
+				lines: []string{
+					"foo\n", "bar\n", "baz\n",
+					"qux\n", "quux\n", "corge\n",
+					"grault\n", "garply\n", "waldo\n",
+					"fred\n",
+				},
+			},
+			lines: []string{
+				"foo\n", "bar\n", "baz\n",
+				"qux\n", "quux\n", "corge\n",
+				"grault\n", "garply\n", "waldo\n",
+				"fred\n",
 			},
 		},
 	} {

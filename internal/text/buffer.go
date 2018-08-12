@@ -1,36 +1,42 @@
 package text
 
-import "bytes"
+import (
+	"bytes"
+	"sync"
+)
 
 type Buffer struct {
-	lines []int
-	text  []byte
+	mutex sync.Mutex
+	tmp   []byte
+	lines []string
 }
 
-func (b *Buffer) Lines() [][]byte {
-	lines := make([][]byte, 0, len(b.lines)+1)
-	begin := 0
-	for _, end := range b.lines {
-		lines = append(lines, b.text[begin:end])
-		begin = end
-	}
-	if begin < len(b.text) {
-		lines = append(lines, b.text[begin:])
-	}
-	return lines
+func (b *Buffer) Lines() []string {
+	b.mutex.Lock()
+	defer b.mutex.Unlock()
+
+	return b.lines
 }
 
 func (b *Buffer) Write(x []byte) (n int, err error) {
 	n = len(x)
+	b.mutex.Lock()
+	defer b.mutex.Unlock()
+
 	for {
 		if idx := bytes.IndexByte(x, byte('\n')); idx == -1 {
 			break
+		} else if len(b.tmp) < 1 {
+			b.lines = append(b.lines, string(x[:idx+1]))
+			x = x[idx+1:]
 		} else {
-			b.text = append(b.text, x[:idx+1]...)
-			b.lines = append(b.lines, len(b.text))
+			b.tmp = append(b.tmp, x[:idx+1]...)
+			b.lines = append(b.lines, string(b.tmp))
+			b.tmp = b.tmp[:0]
 			x = x[idx+1:]
 		}
 	}
-	b.text = append(b.text, x...)
+	b.tmp = append(b.tmp, x...)
+
 	return
 }
