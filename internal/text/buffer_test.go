@@ -12,7 +12,7 @@ type step struct {
 	lines  []string
 }
 
-func TestBuffer(t *testing.T) {
+func TestBufferCore(t *testing.T) {
 	require := require.New(t)
 
 	b := &Buffer{}
@@ -137,5 +137,26 @@ func TestBuffer(t *testing.T) {
 		require.NoError(err)
 		require.Equal(step.buffer, b)
 		require.Equal(step.lines, b.Lines())
+	}
+}
+
+func TestBufferPubSub(t *testing.T) {
+	require := require.New(t)
+
+	b := &Buffer{}
+	defer b.Close()
+
+	ch := b.Subscribe()
+	require.NotNil(ch)
+
+	_, err := b.Write([]byte("foo\nbar\nbaz"))
+	require.NoError(err)
+	for _, expected := range []string{"foo\n", "bar\n", ""} {
+		select {
+		case actual := <-ch:
+			require.Equal(expected, actual)
+		default:
+			require.Equal(expected, "")
+		}
 	}
 }
