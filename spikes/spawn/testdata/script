@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "$$: Started"
+
+sleep $[ $RANDOM % 12 + 3 ]
+
+if [[ $[ $RANDOM % 7] -lt 5 ]]; then
+  echo "$$: Crashed"
+  exit 0
+else
+  echo "$$: Stopped"
+  exit 1
+fi
