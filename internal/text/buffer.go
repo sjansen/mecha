@@ -5,14 +5,14 @@ import (
 	"sync"
 )
 
-type Buffer struct {
+type LineBuffer struct {
 	mutex       sync.RWMutex
 	tmp         []byte
 	lines       []string
 	subscribers []chan string
 }
 
-func (b *Buffer) Close() error {
+func (b *LineBuffer) Close() error {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	for _, ch := range b.subscribers {
@@ -22,13 +22,13 @@ func (b *Buffer) Close() error {
 	return nil
 }
 
-func (b *Buffer) Lines() []string {
+func (b *LineBuffer) Lines() []string {
 	b.mutex.RLock()
 	defer b.mutex.RUnlock()
 	return b.lines
 }
 
-func (b *Buffer) Write(x []byte) (n int, err error) {
+func (b *LineBuffer) Write(x []byte) (n int, err error) {
 	var lines []string
 	n = len(x)
 
@@ -69,7 +69,7 @@ func (b *Buffer) Write(x []byte) (n int, err error) {
 	return
 }
 
-func (b *Buffer) Subscribe() <-chan string {
+func (b *LineBuffer) Subscribe() <-chan string {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	ch := make(chan string, 10)

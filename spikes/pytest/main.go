@@ -29,8 +29,8 @@ func exists(name string) (bool, error) {
 }
 
 func newCommand() (cmd *exec.Cmd, stdout, stderr <-chan string) {
-	b1 := &text.Buffer{}
-	b2 := &text.Buffer{}
+	b1 := &text.LineBuffer{}
+	b2 := &text.LineBuffer{}
 
 	cmd = exec.Command(pytest, "-v")
 	cmd.Stdout = b1

@@ -8,18 +8,18 @@ import (
 
 type step struct {
 	write  []byte
-	buffer *Buffer
+	buffer *LineBuffer
 	lines  []string
 }
 
-func TestBufferCore(t *testing.T) {
+func TestLineBufferCore(t *testing.T) {
 	require := require.New(t)
 
-	b := &Buffer{}
+	b := &LineBuffer{}
 	for _, step := range []step{
 		{
 			write: []byte("foo\n"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: nil,
 				lines: []string{
 					"foo\n",
@@ -31,7 +31,7 @@ func TestBufferCore(t *testing.T) {
 		},
 		{
 			write: []byte("bar\nbaz"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: []byte("baz"),
 				lines: []string{
 					"foo\n", "bar\n",
@@ -43,7 +43,7 @@ func TestBufferCore(t *testing.T) {
 		},
 		{
 			write: []byte("\nqux\n"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: []byte{},
 				lines: []string{
 					"foo\n", "bar\n", "baz\n",
@@ -57,7 +57,7 @@ func TestBufferCore(t *testing.T) {
 		},
 		{
 			write: []byte("qu"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: []byte("qu"),
 				lines: []string{
 					"foo\n", "bar\n", "baz\n",
@@ -70,7 +70,7 @@ func TestBufferCore(t *testing.T) {
 		},
 		{
 			write: []byte("ux\ncorge"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: []byte("corge"),
 				lines: []string{
 					"foo\n", "bar\n", "baz\n",
@@ -84,7 +84,7 @@ func TestBufferCore(t *testing.T) {
 		},
 		{
 			write: []byte("\ngrault\ngarply\nwaldo\nf"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: []byte("f"),
 				lines: []string{
 					"foo\n", "bar\n", "baz\n",
@@ -100,7 +100,7 @@ func TestBufferCore(t *testing.T) {
 		},
 		{
 			write: []byte("re"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: []byte("fre"),
 				lines: []string{
 					"foo\n", "bar\n", "baz\n",
@@ -116,7 +116,7 @@ func TestBufferCore(t *testing.T) {
 		},
 		{
 			write: []byte("d\n"),
-			buffer: &Buffer{
+			buffer: &LineBuffer{
 				tmp: []byte{},
 				lines: []string{
 					"foo\n", "bar\n", "baz\n",
@@ -140,10 +140,10 @@ func TestBufferCore(t *testing.T) {
 	}
 }
 
-func TestBufferPubSub(t *testing.T) {
+func TestLineBufferPubSub(t *testing.T) {
 	require := require.New(t)
 
-	b := &Buffer{}
+	b := &LineBuffer{}
 	defer b.Close()
 
 	ch := b.Subscribe()
