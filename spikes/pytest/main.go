@@ -7,7 +7,7 @@ import (
 	"regexp"
 
 	"github.com/fatih/color"
-	"github.com/sjansen/mecha/internal/text"
+	"github.com/sjansen/mecha/internal/streams"
 )
 
 const pytest = "testdata/venv/bin/pytest"
@@ -29,8 +29,8 @@ func exists(name string) (bool, error) {
 }
 
 func newCommand() (cmd *exec.Cmd, stdout, stderr <-chan string) {
-	b1 := &text.LineBuffer{}
-	b2 := &text.LineBuffer{}
+	b1 := &streams.LineBuffer{}
+	b2 := &streams.LineBuffer{}
 
 	cmd = exec.Command(pytest, "-v")
 	cmd.Stdout = b1
