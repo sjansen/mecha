@@ -12,7 +12,7 @@ import (
 
 func spawn() int {
 	cmd := exec.Command("testdata/script")
-	cmd.Stdout = os.Stdout
+	cmd.Stdout = os.Stderr
 	cmd.Stderr = os.Stderr
 
 	err := cmd.Start()
@@ -37,7 +37,7 @@ func main() {
 	var wg sync.WaitGroup
 
 	start := 250
-	var crashed, exited, restarted int
+	var crashed, stopped, restarted int
 	ctx, cancel := context.WithTimeout(context.Background(), 16*time.Second)
 	defer cancel()
 	for i := 0; i < start; i++ {
@@ -46,7 +46,7 @@ func main() {
 			defer wg.Done()
 			for {
 				if rc := spawn(); rc == 0 {
-					exited++
+					stopped++
 				} else {
 					crashed++
 				}
@@ -65,7 +65,7 @@ func main() {
 	fmt.Println(
 		"started:", start,
 		"crashed:", crashed,
-		"exited:", exited,
+		"stopped:", stopped,
 		"restarted:", restarted,
 	)
 }

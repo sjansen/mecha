@@ -1,0 +1,9 @@
+#!/bin/bash
+
+LOG=$(mktemp -t spawn)
+
+go run main.go 2> "$LOG"
+echo
+echo Started: $(grep Started "$LOG" | wc -l)
+echo Crashed: $(grep Crashed "$LOG" | wc -l)
+echo Stopped: $(grep Stopped "$LOG" | wc -l)

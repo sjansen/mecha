@@ -5,9 +5,9 @@ echo "$$: Started"
 sleep $[ $RANDOM % 12 + 3 ]
 
 if [[ $[ $RANDOM % 7] -lt 5 ]]; then
-  echo "$$: Crashed"
+  echo "$$: Stopped"
   exit 0
 else
-  echo "$$: Stopped"
+  echo "$$: Crashed"
   exit 1
 fi
