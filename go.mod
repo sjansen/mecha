@@ -9,7 +9,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/anmitsu/go-shlex v0.0.0-20161002113705-648efa622239 // indirect
-	github.com/aws/aws-sdk-go v1.15.26
+	github.com/aws/aws-sdk-go-v2 v2.0.0-preview.4+incompatible
 	github.com/beevik/ntp v0.2.0
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20160726135117-62c6fe619375
@@ -39,6 +39,7 @@ require (
 	github.com/gotestyourself/gotestyourself v2.1.0+incompatible // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
+	github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8 // indirect
 	github.com/jtolds/gls v4.2.1+incompatible // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20180317175531-9fc7bb800b55 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
