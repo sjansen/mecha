@@ -9,6 +9,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/anmitsu/go-shlex v0.0.0-20161002113705-648efa622239 // indirect
+	github.com/aws/aws-sdk-go v1.15.26
 	github.com/beevik/ntp v0.2.0
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20160726135117-62c6fe619375
@@ -27,6 +28,7 @@ require (
 	github.com/gdamore/encoding v0.0.0-20151215212835-b23993cbb635 // indirect
 	github.com/gdamore/tcell v1.1.0
 	github.com/gliderlabs/ssh v0.1.1 // indirect
+	github.com/go-ini/ini v1.25.4
 	github.com/go-ole/go-ole v1.2.1 // indirect
 	github.com/gogo/protobuf v1.1.1 // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
