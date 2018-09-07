@@ -46,6 +46,9 @@ func main() {
 		svc := iam.New(cfg)
 		req := svc.ListAccessKeysRequest(&iam.ListAccessKeysInput{})
 		result, err := req.Send()
+		if err != nil {
+			die(err)
+		}
 
 		fmt.Println(profile)
 		for _, metadata := range result.AccessKeyMetadata {
