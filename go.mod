@@ -42,6 +42,7 @@ require (
 	github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8 // indirect
 	github.com/jtolds/gls v4.2.1+incompatible // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20180317175531-9fc7bb800b55 // indirect
+	github.com/kr/fs v0.1.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v0.0.0-20180526135729-345fbb3dbcdb // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
@@ -56,6 +57,7 @@ require (
 	github.com/opencontainers/selinux v1.0.0-rc1 // indirect
 	github.com/pelletier/go-buffruneio v0.2.0 // indirect
 	github.com/pkg/errors v0.8.0 // indirect
+	github.com/pkg/sftp v1.8.2
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/tview v0.0.0-20180807072540-21f50f5bc400
 	github.com/sergi/go-diff v1.0.0 // indirect
@@ -69,7 +71,7 @@ require (
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1
-	golang.org/x/crypto v0.0.0-20180808211826-de0752318171 // indirect
+	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
 	golang.org/x/net v0.0.0-20180808004115-f9ce57c11b24
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
 	golang.org/x/sys v0.0.0-20180808154034-904bdc257025 // indirect
