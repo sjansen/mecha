@@ -40,7 +40,7 @@ func (cmd *MungeCmd) run(pc *kingpin.ParseContext) error {
 // main
 func main() {
 	app := kingpin.
-		New("kingping-demo", "A tool to explore the kingping API").
+		New("kingpin-demo", "A tool to explore the kingpin API").
 		UsageTemplate(kingpin.CompactUsageTemplate)
 
 	f := &FrobCmd{}
