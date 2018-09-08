@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 
-	"github.com/go-ini/ini"
+	"github.com/knq/ini"
 )
 
 func die(err error) {
@@ -26,13 +26,14 @@ func filename() string {
 func main() {
 	filename := filename()
 
-	cfg, err := ini.Load(filename)
+	cfg, err := ini.LoadFile(filename)
 	if err != nil {
 		die(err)
 	}
 
-	for _, profile := range cfg.SectionStrings() {
-		if profile == ini.DEFAULT_SECTION {
+	for _, profile := range cfg.SectionNames() {
+		section := cfg.GetSection(profile)
+		if kid := section.Get("aws_access_key_id"); kid == "" {
 			continue
 		}
 
