@@ -1,7 +1,5 @@
 default: test
 
-DIRS=`go list ./... | grep -v /spikes/`
-
 spikes:
 	@for I in spikes/*/main.go; do \
 	  echo ; \
@@ -15,13 +13,13 @@ spikes:
 	done
 
 test:
-	go test -tags integration ./...
-	@echo ========================================
-	go vet ./...
-	golangci-lint run
-	#golint -set_exit_status $(DIRS)
+	@scripts/run-all-tests
 	@echo ========================================
 	@git grep TODO  -- '**.go' || true
 	@git grep FIXME -- '**.go' || true
 
-.PHONY: default spikes test
+test-docker:
+	docker-compose --version
+	docker-compose up --abort-on-container-exit --exit-code-from=go --force-recreate
+
+.PHONY: default spikes test test-docker

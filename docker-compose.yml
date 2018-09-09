@@ -1,0 +1,11 @@
+version: '2'
+services:
+  go:
+    build:
+      context: ./docker/go
+    command: ./scripts/run-all-tests
+    environment:
+      GO111MODULE: "on"
+    volumes:
+     - .:/go/src/github.com/sjansen/mecha
+    working_dir: /go/src/github.com/sjansen/mecha
