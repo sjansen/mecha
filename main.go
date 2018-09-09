@@ -5,6 +5,8 @@ import (
 	"os"
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
+
+	"github.com/sjansen/mecha/internal/commands"
 )
 
 func main() {
@@ -12,8 +14,8 @@ func main() {
 		New("mecha", "A tool to make software development easier").
 		UsageTemplate(kingpin.CompactUsageTemplate)
 
-	v := &versionCmd{}
-	v.register(app)
+	(&versionCmd{}).register(app)
+	commands.Register(app)
 
 	if len(os.Args) == 1 {
 		app.Usage(os.Args[1:])
