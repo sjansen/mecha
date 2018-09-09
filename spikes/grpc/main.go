@@ -112,7 +112,9 @@ func main() {
 	} else if os.Args[1] == "--as-server" {
 		startServer()
 	} else {
-		for _, msg := range []string{"sbb", "one", "onm", "dhk", "dhhk", "pbetr", "tenhyg", "tnecyl", "jnyqb", "serq"} {
+		for _, msg := range []string{
+			"sbb", "one", "onm", "dhk", "dhhk", "pbetr", "tenhyg", "tnecyl", "jnyqb", "serq",
+		} {
 			startClient(msg)
 		}
 	}

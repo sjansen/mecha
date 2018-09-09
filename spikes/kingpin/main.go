@@ -17,8 +17,8 @@ func (f *FrobCmd) register(app *kingpin.Application) {
 	cmd.Arg("FILE", "A filename.").Required().ExistingFileVar(&f.Filename)
 }
 
-func (cmd *FrobCmd) run(pc *kingpin.ParseContext) error {
-	fmt.Printf("frobbing %q...\n", cmd.Filename)
+func (f *FrobCmd) run(pc *kingpin.ParseContext) error {
+	fmt.Printf("frobbing %q...\n", f.Filename)
 	return nil
 }
 
@@ -32,8 +32,8 @@ func (m *MungeCmd) register(app *kingpin.Application) {
 	cmd.Arg("FILE", "A filename.").Required().ExistingFileVar(&m.Filename)
 }
 
-func (cmd *MungeCmd) run(pc *kingpin.ParseContext) error {
-	fmt.Printf("munging %q...\n", cmd.Filename)
+func (m *MungeCmd) run(pc *kingpin.ParseContext) error {
+	fmt.Printf("munging %q...\n", m.Filename)
 	return nil
 }
 

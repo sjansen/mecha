@@ -112,7 +112,7 @@ func search(head *object.Commit, path string, target plumbing.Hash) (*object.Com
 			} else if h == target {
 				seen[parent.Hash] = struct{}{}
 				stack = append(stack, parent)
-				found += 1
+				found++
 			}
 			return nil
 		})

@@ -27,7 +27,12 @@ func load(_ *skylark.Thread, module string) (skylark.StringDict, error) {
 	return globals, err
 }
 
-func sqrt(thread *skylark.Thread, _ *skylark.Builtin, args skylark.Tuple, kwargs []skylark.Tuple) (skylark.Value, error) {
+func sqrt(
+	thread *skylark.Thread,
+	_ *skylark.Builtin,
+	args skylark.Tuple,
+	kwargs []skylark.Tuple,
+) (skylark.Value, error) {
 	var x skylark.Float
 	if err := skylark.UnpackArgs("sqrt", args, kwargs, "x", &x); err != nil {
 		return nil, err
