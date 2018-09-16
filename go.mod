@@ -3,7 +3,6 @@ module github.com/sjansen/mecha
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/Masterminds/semver v1.4.2
-	github.com/Microsoft/go-winio v0.4.9 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/alcortesm/tgz v0.0.0-20161220082320-9c5fe88206d7 // indirect
@@ -16,7 +15,6 @@ require (
 	github.com/chzyer/readline v0.0.0-20160726135117-62c6fe619375
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/containerd/continuity v0.0.0-20180712174259-0377f7d76720 // indirect
-	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/docker/docker v0.0.0-20180412203414-a422774e593b // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.3.3 // indirect
@@ -60,11 +58,11 @@ require (
 	github.com/pelletier/go-buffruneio v0.2.0 // indirect
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/pkg/sftp v1.8.2
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/tview v0.0.0-20180807072540-21f50f5bc400
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/shirou/gopsutil v0.0.0-20180801053943-8048a2e9c577
 	github.com/sirupsen/logrus v1.0.6 // indirect
+	github.com/sjansen/watchman v0.1.0
 	github.com/smartystreets/assertions v0.0.0-20180820201707-7c9eb446e3cf // indirect
 	github.com/smartystreets/goconvey v0.0.0-20180222194500-ef6db91d284a // indirect
 	github.com/src-d/gcfg v1.3.0 // indirect
@@ -76,7 +74,6 @@ require (
 	golang.org/x/crypto v0.0.0-20180808211826-de0752318171
 	golang.org/x/net v0.0.0-20180808004115-f9ce57c11b24
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
-	golang.org/x/sys v0.0.0-20180808154034-904bdc257025 // indirect
 	golang.org/x/text v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20180808183934-383e8b2c3b9e // indirect
 	google.golang.org/grpc v1.14.0
