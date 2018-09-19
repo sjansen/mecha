@@ -10,7 +10,8 @@ type versionCmd struct {
 	version string
 }
 
-func (v *versionCmd) register(app *kingpin.Application) {
+func (v *versionCmd) register(app *kingpin.Application, version string) {
+	v.version = version
 	app.Command("version", "Print mecha's version").Action(v.run)
 }
 
