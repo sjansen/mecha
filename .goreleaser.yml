@@ -1,0 +1,20 @@
+archive:
+  format_overrides:
+    - goos: windows
+      format: zip
+builds:
+- env:
+  - CGO_ENABLED=0
+  goarch:
+  - amd64
+checksum:
+  name_template: 'checksums.txt'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+    - '.*'
+release:
+  prerelease: true
