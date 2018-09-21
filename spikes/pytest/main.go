@@ -13,7 +13,7 @@ import (
 const pytest = "testdata/venv/bin/pytest"
 
 // testdata/example/a_test.py::test__a__1 PASSED                     [  2%]
-var testcase = regexp.MustCompile(`^(.+?)::[^\s]+ (.[^\s]+)`)
+var testcase = regexp.MustCompile(`^(.+?)::[^\s]+ (.[^\s]+).*(....%.)\n`)
 
 func die(err error) {
 	fmt.Fprintln(os.Stderr, "FATAL:", err)
@@ -53,7 +53,7 @@ func main() {
 	cmd, stdout, stderr := newCommand()
 	go func() {
 		green := color.New(color.FgGreen)
-		var testfile string
+		var progress, testfile string
 		for line := range stdout {
 			if match := testcase.FindStringSubmatch(line); match == nil {
 				if testfile != "" {
@@ -63,8 +63,12 @@ func main() {
 				green.Print("STDOUT: ", line)
 			} else {
 				if match[1] != testfile {
-					if testfile != "" {
+					if testfile == "" {
+						os.Stdout.WriteString("[  0%]  ")
+					} else {
 						os.Stdout.WriteString("\n")
+						os.Stdout.WriteString(progress)
+						os.Stdout.WriteString("  ")
 					}
 					testfile = match[1]
 					os.Stdout.WriteString(testfile)
@@ -75,6 +79,7 @@ func main() {
 				} else {
 					os.Stdout.WriteString("F")
 				}
+				progress = match[3]
 				os.Stdout.Sync()
 			}
 		}
