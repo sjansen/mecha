@@ -28,7 +28,7 @@ func (cmd *pinCmd) register(app *kingpin.Application, version string) {
 }
 
 func (cmd *pinCmd) run(pc *kingpin.ParseContext) error {
-	cfg, err := fs.OpenConfig()
+	cfg, err := fs.OpenProjectConfig()
 	if err != nil {
 		return err
 	}

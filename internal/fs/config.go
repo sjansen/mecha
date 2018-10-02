@@ -7,7 +7,7 @@ import (
 	"github.com/knq/ini"
 )
 
-func OpenConfig() (f *ini.File, err error) {
+func OpenProjectConfig() (f *ini.File, err error) {
 	dir, err := os.Getwd()
 	if err != nil {
 		return
