@@ -35,7 +35,7 @@ func TestGetPinned(t *testing.T) {
 	defer f.AssertExpectations(t)
 	f.On("GetKey", "core.version").Return("0")
 
-	c := Config{Project: f}
+	c := Files{Project: f}
 	actual := c.GetPinned()
 	require.Equal("0", actual)
 
@@ -71,7 +71,7 @@ func TestSetPinned(t *testing.T) {
 				f.On("SetKey", "core.version", tc.Request).Return()
 				f.On("Save").Return(nil)
 			}
-			c := Config{Project: f}
+			c := Files{Project: f}
 
 			r1, r2 := c.SetPinned(tc.Request)
 			require.Equal(tc.R1, r1)

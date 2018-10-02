@@ -7,7 +7,7 @@ type File interface {
 	Save() error
 }
 
-type Config struct {
+type Files struct {
 	// Dirty Flags
 	systemDirty  bool
 	userDirty    bool
@@ -18,7 +18,7 @@ type Config struct {
 	Project File
 }
 
-func (c *Config) Save() error {
+func (c *Files) Save() error {
 	if c.projectDirty {
 		if err := c.Project.Save(); err != nil {
 			return err
@@ -37,11 +37,11 @@ func (c *Config) Save() error {
 	return nil
 }
 
-func (c *Config) GetPinned() string {
+func (c *Files) GetPinned() string {
 	return c.Project.GetKey("core.version")
 }
 
-func (c *Config) SetPinned(version string) (before, after string) {
+func (c *Files) SetPinned(version string) (before, after string) {
 	before = c.Project.GetKey("core.version")
 	if before == version {
 		after = "no change"
