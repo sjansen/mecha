@@ -5,6 +5,7 @@ import (
 
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 
+	"github.com/sjansen/mecha/internal/config"
 	"github.com/sjansen/mecha/internal/fs"
 )
 
@@ -33,42 +34,23 @@ func (cmd *pinCmd) run(pc *kingpin.ParseContext) error {
 		return err
 	}
 
-	before := cfg.GetKey("core.version")
-	if !(cmd.add || cmd.remove) {
-		if before == "" {
-			fmt.Println("status:", "not pinned")
-		} else {
-			fmt.Println("status:", before)
+	c := config.Files{Project: cfg}
+	if cmd.add || cmd.remove {
+		var version string
+		if cmd.add {
+			version = cmd.version
 		}
-		return nil
+		before, after := c.SetPinned(version)
+		fmt.Println("before:", before)
+		fmt.Println("after:", after)
+		return cfg.Save()
 	}
 
-	var after string
-	if cmd.add {
-		if before == cmd.version {
-			after = "no change"
-		} else {
-			after = cmd.version
-			cfg.SetKey("core.version", after)
-		}
-	} else if cmd.remove {
-		if before == "" {
-			after = "no change"
-		} else {
-			after = "not pinned"
-			cfg.RemoveKey("core.version")
-		}
+	version := c.GetPinned()
+	if version == "" {
+		fmt.Println("status:", "not pinned")
+	} else {
+		fmt.Println("status:", version)
 	}
-
-	if err = cfg.Save(); err != nil {
-		return err
-	}
-
-	if before == "" {
-		before = "not pinned"
-	}
-	fmt.Println("before:", before)
-	fmt.Println("after:", after)
-
 	return nil
 }

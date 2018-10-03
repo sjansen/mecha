@@ -10,7 +10,7 @@ import (
 
 type initCmd struct{}
 
-const config = `[core]
+const template = `[core]
 config_version = 0
 `
 
@@ -26,7 +26,7 @@ func (cmd *initCmd) run(pc *kingpin.ParseContext) (err error) {
 	}
 
 	filename := filepath.Join(".mecha", "config")
-	if err = ioutil.WriteFile(filename, []byte(config), os.ModePerm); err != nil {
+	if err = ioutil.WriteFile(filename, []byte(template), os.ModePerm); err != nil {
 		return
 	}
 
