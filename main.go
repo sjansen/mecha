@@ -8,6 +8,8 @@ import (
 	"github.com/sjansen/mecha/internal/commands"
 )
 
+var build string // set by goreleaser
+
 func main() {
 	app := kingpin.
 		New("mecha", "A tool to make software development easier").
