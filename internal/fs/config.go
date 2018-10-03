@@ -7,23 +7,35 @@ import (
 	"github.com/knq/ini"
 )
 
-func OpenProjectConfig() (f *ini.File, err error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return
-	}
+func FindProjectRoot(dir string) (root string, err error) {
 	for {
 		filename := filepath.Join(dir, ".mecha", "config")
 		if _, err := os.Stat(filename); err == nil {
-			return ini.LoadFile(filename)
+			return dir, nil
+		} else if !os.IsNotExist(err) {
+			return "", err
 		}
 
 		parent := filepath.Dir(dir)
 		if dir == parent {
 			break
 		}
-
 		dir = parent
 	}
-	return nil, nil
+	return "", os.ErrNotExist
+}
+
+func OpenProjectConfig() (f *ini.File, err error) {
+	wd, err := os.Getwd()
+	if err != nil {
+		return
+	}
+
+	root, err := FindProjectRoot(wd)
+	if err != nil {
+		return
+	}
+
+	filename := filepath.Join(root, ".mecha", "config")
+	return ini.LoadFile(filename)
 }
