@@ -12,7 +12,11 @@ func main() {
 	app := kingpin.
 		New("mecha", "A tool to make software development easier").
 		UsageTemplate(kingpin.CompactUsageTemplate)
-	commands.Register(app, version)
+	if build != "" {
+		commands.Register(app, build)
+	} else {
+		commands.Register(app, version)
+	}
 
 	if len(os.Args) == 1 {
 		app.Usage(os.Args[1:])

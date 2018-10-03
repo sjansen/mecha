@@ -2,6 +2,13 @@ archive:
   format_overrides:
     - goos: windows
       format: zip
+brew:
+  github:
+    owner: sjansen
+    name: homebrew-mecha
+  commit_author:
+    name: sjansen
+    email: sjansen@buscaluz.org
 builds:
 - env:
   - CGO_ENABLED=0
