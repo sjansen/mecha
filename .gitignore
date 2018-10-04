@@ -1,6 +1,5 @@
 # Directories
 /dist/
-/vendor/
 /webui/elm-stuff/
 /webui/node_modules/
 .pytest_cache/
@@ -8,8 +7,8 @@ venv/
 
 # Files
 /mecha
+/TODO
 .DS_Store
-TODO
 
 # Patterns
 *.py[co]
