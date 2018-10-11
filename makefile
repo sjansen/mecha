@@ -1,10 +1,18 @@
 default: test
 
+clean:
+	@for I in spikes/*/main.go; do \
+	  pushd `dirname "$$I"` >/dev/null; \
+	  rm `basename $$PWD` 2>/dev/null || true; \
+	  popd >/dev/null; \
+	done
+
 spikes:
 	@for I in spikes/*/main.go; do \
 	  echo ; \
 	  echo $$I; \
 	  pushd `dirname "$$I"` >/dev/null; \
+	  echo `basename $$PWD` > .gitignore; \
 	  echo ----------; \
 	  echo '1+2' | go run *.go; \
 	  echo ==========; \
@@ -22,4 +30,4 @@ test-docker:
 	docker-compose --version
 	docker-compose up --abort-on-container-exit --exit-code-from=go --force-recreate
 
-.PHONY: default spikes test test-docker
+.PHONY: clean default spikes test test-docker
