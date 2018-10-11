@@ -2,16 +2,57 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
+	"math/rand"
 	"os"
 	"os/exec"
+	"strconv"
 	"sync"
 	"syscall"
 	"time"
 )
 
-func spawn() int {
-	cmd := exec.Command("testdata/script")
+var id int
+
+func init() {
+	flag.IntVar(&id, "as-test-child", 0, "")
+}
+
+func main() {
+	flag.Parse()
+	if id > 0 {
+		makeSomeNoise()
+	} else {
+		startChildren()
+	}
+}
+
+func makeSomeNoise() {
+	pid := os.Getpid()
+	fmt.Printf("%2d: Started (pid=%d)\n", id, pid)
+
+	rand.Seed(int64(id))
+	n := rand.Intn(12) + 3
+	time.Sleep(time.Duration(n) * time.Second)
+
+	n = rand.Intn(7)
+	if n < 5 {
+		fmt.Printf("%2d: Stopped (pid=%d)\n", id, pid)
+		os.Exit(0)
+	} else {
+		fmt.Printf("%2d: Crashed (pid=%d)\n", id, pid)
+		os.Exit(1)
+	}
+
+}
+
+func spawn(i int) int {
+	cmd := exec.Command(
+		os.Args[0],
+		"--as-test-child",
+		strconv.Itoa(i),
+	)
 	cmd.Stdout = os.Stderr
 	cmd.Stderr = os.Stderr
 
@@ -33,19 +74,19 @@ func spawn() int {
 	}
 }
 
-func main() {
+func startChildren() {
 	var wg sync.WaitGroup
 
-	start := 250
+	start := 50
 	var crashed, stopped, restarted int
 	ctx, cancel := context.WithTimeout(context.Background(), 16*time.Second)
 	defer cancel()
-	for i := 0; i < start; i++ {
+	for i := 1; i <= start; i++ {
 		wg.Add(1)
-		go func() {
+		go func(i int) {
 			defer wg.Done()
 			for {
-				if rc := spawn(); rc == 0 {
+				if rc := spawn(i); rc == 0 {
 					stopped++
 				} else {
 					crashed++
@@ -58,14 +99,14 @@ func main() {
 				}
 			}
 
-		}()
+		}(i)
 	}
 
 	wg.Wait()
 	fmt.Println(
 		"started:", start,
-		"crashed:", crashed,
-		"stopped:", stopped,
-		"restarted:", restarted,
+		"| restarted:", restarted,
+		"| crashed:", crashed,
+		"| stopped:", stopped,
 	)
 }
