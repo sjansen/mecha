@@ -44,7 +44,11 @@ func newScreen() *screen {
 	}
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		key := e.Key()
-		if key == tcell.KeyRune && e.Rune() == 'q' {
+		if key == tcell.KeyTab {
+			screen.changeFocus()
+			screen.app.Draw()
+			return nil
+		} else if key == tcell.KeyRune && e.Rune() == 'q' {
 			app.Stop()
 		}
 		return e
@@ -104,6 +108,25 @@ func (s *screen) addStreamPair(title string, stdout, stderr <-chan string) {
 		}
 		fmt.Fprintf(view, `[::r]Press "q" to quit.`)
 	}()
+}
+
+func (s *screen) changeFocus() {
+	if s.menu.HasFocus() {
+		if len(s.views) > 0 {
+			s.app.SetFocus(s.views[0])
+		}
+		return
+	}
+	for i, view := range s.views {
+		if view.HasFocus() {
+			if (i + 1) < len(s.views) {
+				s.app.SetFocus(s.views[i+1])
+			} else {
+				s.app.SetFocus(s.menu)
+			}
+			return
+		}
+	}
 }
 
 func (s *screen) run() error {
