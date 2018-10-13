@@ -1,13 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"regexp"
+	"time"
 
 	"github.com/fatih/color"
-	"github.com/sjansen/mecha/internal/streams"
+	"github.com/sjansen/mecha/internal/subprocess"
 )
 
 const pytest = "testdata/venv/bin/pytest"
@@ -28,20 +29,6 @@ func exists(name string) (bool, error) {
 	return err == nil, err
 }
 
-func newCommand() (cmd *exec.Cmd, stdout, stderr <-chan string) {
-	b1 := &streams.LineBuffer{}
-	b2 := &streams.LineBuffer{}
-
-	cmd = exec.Command(pytest, "-v")
-	cmd.Stdout = b1
-	cmd.Stderr = b2
-
-	stdout = b1.Subscribe()
-	stderr = b2.Subscribe()
-
-	return
-}
-
 func main() {
 	if exists, err := exists(pytest); err != nil {
 		die(err)
@@ -50,7 +37,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	cmd, stdout, stderr := newCommand()
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		60*time.Second,
+	)
+	stdout, stderr, status, err := subprocess.Run(ctx, pytest, "-v")
+	if err != nil {
+		die(err)
+	}
+	defer cancel()
+
 	go func() {
 		green := color.New(color.FgGreen)
 		var progress, testfile string
@@ -91,8 +87,8 @@ func main() {
 		}
 	}()
 
-	err := cmd.Run()
-	if err != nil {
-		die(err)
+	s := <-status
+	if s.Error != nil {
+		die(s.Error)
 	}
 }
