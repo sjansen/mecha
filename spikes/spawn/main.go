@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"os/exec"
 	"strconv"
 	"sync"
-	"syscall"
 	"time"
+
+	"github.com/sjansen/mecha/internal/subprocess"
 )
 
 var id int
@@ -47,30 +47,27 @@ func makeSomeNoise() {
 
 }
 
-func spawn(i int) int {
-	cmd := exec.Command(
+func spawn(ctx context.Context, i int) int {
+	stdout, stderr, status, err := subprocess.Run(
+		ctx,
 		os.Args[0],
 		"--as-test-child",
 		strconv.Itoa(i),
 	)
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
-
-	err := cmd.Start()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return -1
 	}
 
-	err = cmd.Wait()
-	if err == nil {
-		return 0
-	} else if _, ok := err.(*exec.ExitError); ok {
-		status, _ := cmd.ProcessState.Sys().(syscall.WaitStatus)
-		return status.ExitStatus()
-	} else {
-		fmt.Fprintln(os.Stderr, err)
-		return -1
+	for {
+		select {
+		case line := <-stdout:
+			os.Stdout.Write([]byte(line))
+		case line := <-stderr:
+			os.Stderr.Write([]byte(line))
+		case s := <-status:
+			return s.Status
+		}
 	}
 }
 
@@ -86,7 +83,7 @@ func startChildren() {
 		go func(i int) {
 			defer wg.Done()
 			for {
-				if rc := spawn(i); rc == 0 {
+				if rc := spawn(ctx, i); rc == 0 {
 					stopped++
 				} else {
 					crashed++
