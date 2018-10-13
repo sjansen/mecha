@@ -22,6 +22,7 @@ type screen struct {
 func newScreen() *screen {
 	// components
 	menu := tview.NewList().
+		SetSelectedBackgroundColor(tcell.ColorBlue).
 		ShowSecondaryText(false)
 	menu.SetBorderPadding(1, 1, 1, 1)
 	rows := tview.NewFlex().
@@ -112,16 +113,23 @@ func (s *screen) addStreamPair(title string, stdout, stderr <-chan string) {
 
 func (s *screen) changeFocus() {
 	if s.menu.HasFocus() {
+		s.menu.SetSelectedBackgroundColor(tcell.ColorWhite)
 		if len(s.views) > 0 {
-			s.app.SetFocus(s.views[0])
+			box := s.views[0]
+			box.SetBorderColor(tcell.ColorBlue)
+			s.app.SetFocus(box)
 		}
 		return
 	}
 	for i, view := range s.views {
 		if view.HasFocus() {
+			view.SetBorderColor(tcell.ColorDefault)
 			if (i + 1) < len(s.views) {
-				s.app.SetFocus(s.views[i+1])
+				box := s.views[i+1]
+				box.SetBorderColor(tcell.ColorBlue)
+				s.app.SetFocus(box)
 			} else {
+				s.menu.SetSelectedBackgroundColor(tcell.ColorBlue)
 				s.app.SetFocus(s.menu)
 			}
 			return
@@ -159,7 +167,7 @@ func main() {
 	}
 	screen.
 		addMenuItem("Add Row", addStreamPair).
-		addMenuItem("Quit Row", screen.stop)
+		addMenuItem("Quit", screen.stop)
 	for i := 0; i < 3; i++ {
 		addStreamPair()
 	}
