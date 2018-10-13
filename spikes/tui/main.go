@@ -18,7 +18,7 @@ var titles = []string{
 
 type screen struct {
 	app   *tview.Application
-	cols  *tview.Flex
+	grid  *tview.Grid
 	rows  *tview.Flex
 	views []*tview.TextView
 }
@@ -51,24 +51,26 @@ func (s *screen) addView() {
 
 func main() {
 	app := tview.NewApplication()
-	cols := tview.NewFlex().
-		SetDirection(tview.FlexColumn)
+	grid := tview.NewGrid().
+		SetColumns(15, 0).
+		SetRows(0)
+	rows := tview.NewFlex().
+		SetDirection(tview.FlexRow)
+	screen := screen{
+		app:   app,
+		grid:  grid,
+		rows:  rows,
+		views: make([]*tview.TextView, 0, 3),
+	}
+
 	menu := tview.NewList().
 		AddItem("Add Row", "", 0, nil).
 		AddItem("Quit", "", 0, nil).
 		ShowSecondaryText(false)
 	menu.SetBorderPadding(1, 1, 1, 1)
-	rows := tview.NewFlex().
-		SetDirection(tview.FlexRow)
-	cols.AddItem(menu, 15, 0, true)
-	cols.AddItem(rows, 0, 1, false)
 
-	screen := screen{
-		app:   app,
-		cols:  cols,
-		rows:  rows,
-		views: make([]*tview.TextView, 0, 3),
-	}
+	grid.AddItem(menu, 0, 0, 1, 1, 0, 0, true)
+	grid.AddItem(rows, 0, 1, 1, 1, 0, 0, false)
 
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		key := e.Key()
@@ -91,7 +93,7 @@ func main() {
 		screen.addView()
 	}
 
-	if err := app.SetRoot(cols, true).Run(); err != nil {
+	if err := app.SetRoot(grid, true).Run(); err != nil {
 		panic(err)
 	}
 }
