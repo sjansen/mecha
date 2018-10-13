@@ -1,19 +1,18 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"flag"
 	"fmt"
-	"io"
 	"math/rand"
 	"os"
-	"os/exec"
 	"strconv"
 	"sync"
 	"time"
 
 	"github.com/fatih/color"
+
+	"github.com/sjansen/mecha/internal/subprocess"
 )
 
 const children = 3
@@ -50,52 +49,16 @@ func makeSomeNoise() {
 	}
 }
 
-func readUntilClosed(c *color.Color, r io.Reader) {
-	scanner := bufio.NewScanner(r)
-	for scanner.Scan() {
-		text := c.Sprint(scanner.Text())
-		fmt.Println(text)
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
-}
-
-func startReader(c *color.Color, wg *sync.WaitGroup) (io.WriteCloser, error) {
-	r, w, err := os.Pipe()
-	if err != nil {
-		return nil, err
-	}
-
+func startReader(wg *sync.WaitGroup, c *color.Color, ch <-chan string) {
 	wg.Add(1)
-	go func(r io.Reader) {
+	go func() {
 		defer wg.Done()
-		readUntilClosed(c, r)
-	}(r)
-
-	return w, nil
-}
-
-func startChild(ctx context.Context, i int, stdout, stderr io.WriteCloser) {
-	cmd := exec.CommandContext(
-		ctx,
-		os.Args[0],
-		"--as-test-child",
-		strconv.Itoa(i),
-	)
-	cmd.Stdout = stdout
-	cmd.Stderr = stderr
-
-	if err := cmd.Start(); err != nil {
-		die(err)
-	}
-	stdout.Close()
-	stderr.Close()
-
-	fmt.Fprintln(os.Stderr, "started:", i, cmd.Process.Pid)
-	if err := cmd.Wait(); err != nil {
-		die(err)
-	}
+		for line := range ch {
+			line := c.Sprint(line)
+			fmt.Print(line)
+		}
+	}()
+	return
 }
 
 func startChildren() {
@@ -115,23 +78,31 @@ func startChildren() {
 
 	wg := &sync.WaitGroup{}
 	for i := 1; i <= children; i++ {
-		stdout, err := startReader(green, wg)
+		fmt.Fprintln(os.Stderr, "starting:", i)
+		stdout, stderr, status, err := subprocess.Run(
+			ctx,
+			os.Args[0],
+			"--as-test-child",
+			strconv.Itoa(i),
+		)
 		if err != nil {
 			die(err)
 		}
 
-		stderr, err := startReader(red, wg)
-		if err != nil {
-			die(err)
-		}
+		fmt.Fprintln(os.Stderr, "started:", i)
+		startReader(wg, green, stdout)
+		startReader(wg, red, stderr)
 
 		wg.Add(1)
-		go func(i int, stdout, stderr io.WriteCloser) {
+		go func(i int) {
 			defer wg.Done()
-			fmt.Fprintln(os.Stderr, "starting:", i)
-			startChild(ctx, i, stdout, stderr)
-			fmt.Fprintln(os.Stderr, "stopped:", i)
-		}(i, stdout, stderr)
+			s := <-status
+			if s.Error != nil {
+				fmt.Fprintf(os.Stderr, "stopped: %d (err=%s)\n", i, s.Error)
+			} else {
+				fmt.Fprintf(os.Stderr, "stopped: %d (rc=%d)\n", i, s.Status)
+			}
+		}(i)
 	}
 	wg.Wait()
 }
