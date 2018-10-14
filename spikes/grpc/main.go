@@ -16,8 +16,7 @@ import (
 )
 
 const (
-	address     = "127.0.0.1:50051"
-	defaultName = "world"
+	address = "127.0.0.1:50051"
 )
 
 func die(err error) {
