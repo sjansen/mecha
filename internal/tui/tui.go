@@ -47,7 +47,11 @@ func NewScreen() *Screen {
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		key := e.Key()
 		if key == tcell.KeyTab {
-			screen.changeFocus()
+			screen.focusNext()
+			screen.app.Draw()
+			return nil
+		} else if key == tcell.KeyBacktab {
+			screen.focusPrev()
 			screen.app.Draw()
 			return nil
 		} else if key == tcell.KeyRune && e.Rune() == 'q' {
@@ -122,7 +126,7 @@ func (s *Screen) Stop() {
 	s.app.Stop()
 }
 
-func (s *Screen) changeFocus() {
+func (s *Screen) focusNext() {
 	if s.menu.HasFocus() {
 		s.menu.SetSelectedBackgroundColor(tcell.ColorWhite)
 		if len(s.views) > 0 {
@@ -142,6 +146,32 @@ func (s *Screen) changeFocus() {
 			} else {
 				s.menu.SetSelectedBackgroundColor(tcell.ColorBlue)
 				s.app.SetFocus(s.menu)
+			}
+			return
+		}
+	}
+}
+
+func (s *Screen) focusPrev() {
+	if s.menu.HasFocus() {
+		s.menu.SetSelectedBackgroundColor(tcell.ColorWhite)
+		if len(s.views) > 0 {
+			box := s.views[len(s.views)-1]
+			box.SetBorderColor(tcell.ColorBlue)
+			s.app.SetFocus(box)
+		}
+		return
+	}
+	for i, view := range s.views {
+		if view.HasFocus() {
+			view.SetBorderColor(tcell.ColorDefault)
+			if i == 0 {
+				s.menu.SetSelectedBackgroundColor(tcell.ColorBlue)
+				s.app.SetFocus(s.menu)
+			} else {
+				box := s.views[i-1]
+				box.SetBorderColor(tcell.ColorBlue)
+				s.app.SetFocus(box)
 			}
 			return
 		}
