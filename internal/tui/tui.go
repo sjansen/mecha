@@ -18,6 +18,8 @@ type Screen struct {
 type MenuAction func()
 
 func NewScreen() *Screen {
+	app := tview.NewApplication()
+
 	// components
 	menu := tview.NewList().
 		SetSelectedBackgroundColor(tcell.ColorBlue).
@@ -25,15 +27,6 @@ func NewScreen() *Screen {
 	menu.SetBorderPadding(1, 1, 1, 1)
 	rows := tview.NewFlex().
 		SetDirection(tview.FlexRow)
-	// layout
-	grid := tview.NewGrid().
-		SetColumns(15, 0).
-		SetRows(0).
-		AddItem(menu, 0, 0, 1, 1, 0, 0, true).
-		AddItem(rows, 0, 1, 1, 1, 0, 0, false)
-	// event handlers
-	app := tview.NewApplication().
-		SetRoot(grid, true)
 	screen := &Screen{
 		app:       app,
 		menu:      menu,
@@ -41,6 +34,16 @@ func NewScreen() *Screen {
 		rows:      rows,
 		views:     make([]*tview.TextView, 0),
 	}
+
+	// layout
+	grid := tview.NewGrid().
+		SetColumns(15, 0).
+		SetRows(0).
+		AddItem(menu, 0, 0, 1, 1, 0, 0, true).
+		AddItem(rows, 0, 1, 1, 1, 0, 0, false)
+	app.SetRoot(grid, true)
+
+	// event handlers
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		key := e.Key()
 		if key == tcell.KeyTab {
@@ -57,6 +60,7 @@ func NewScreen() *Screen {
 			action()
 		}
 	})
+
 	return screen
 }
 
@@ -77,6 +81,7 @@ func (s *Screen) AddStreamPair(title string, stdout, stderr <-chan string) {
 	})
 	s.rows.AddItem(view, 0, 1, false)
 	s.views = append(s.views, view)
+
 	go func() {
 	loop:
 		for {
