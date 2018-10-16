@@ -14,7 +14,7 @@ import (
 const pytest = "testdata/venv/bin/pytest"
 
 // testdata/example/a_test.py::test__a__1 PASSED                     [  2%]
-var testcase = regexp.MustCompile(`^(.+?)::[^\s]+ (.[^\s]+).*(....%.)\n`)
+var testcase = regexp.MustCompile(`^(.+?)::[^\s]+ (.[^\s]+).*(....%.)$`)
 
 func die(err error) {
 	fmt.Fprintln(os.Stderr, "FATAL:", err)
@@ -56,7 +56,7 @@ func main() {
 					testfile = ""
 					os.Stdout.WriteString("\n")
 				}
-				green.Print("STDOUT: ", line)
+				green.Print("STDOUT: ", line, "\n")
 			} else {
 				if match[1] != testfile {
 					if testfile == "" {
@@ -83,7 +83,7 @@ func main() {
 	go func() {
 		red := color.New(color.FgRed)
 		for line := range stderr {
-			red.Print(line)
+			red.Print(line, "\n")
 		}
 	}()
 

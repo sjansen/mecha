@@ -55,9 +55,9 @@ func (b *LineBuffer) Write(x []byte) (n int, err error) {
 
 		var line string
 		if len(b.tmp) < 1 {
-			line = string(x[:idx+1])
+			line = string(x[:idx])
 		} else {
-			b.tmp = append(b.tmp, x[:idx+1]...)
+			b.tmp = append(b.tmp, x[:idx]...)
 			line = string(b.tmp)
 			b.tmp = b.tmp[:0]
 		}

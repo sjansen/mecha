@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-
 	"github.com/sjansen/mecha/internal/subprocess"
 )
 
@@ -55,7 +54,7 @@ func startReader(wg *sync.WaitGroup, c *color.Color, ch <-chan string) {
 		defer wg.Done()
 		for line := range ch {
 			line := c.Sprint(line)
-			fmt.Print(line)
+			fmt.Print(line, "\n")
 		}
 	}()
 	return

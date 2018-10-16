@@ -22,11 +22,11 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: nil,
 				lines: []string{
-					"foo\n",
+					"foo",
 				},
 			},
 			lines: []string{
-				"foo\n",
+				"foo",
 			},
 		},
 		{
@@ -34,11 +34,11 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: []byte("baz"),
 				lines: []string{
-					"foo\n", "bar\n",
+					"foo", "bar",
 				},
 			},
 			lines: []string{
-				"foo\n", "bar\n",
+				"foo", "bar",
 			},
 		},
 		{
@@ -46,13 +46,13 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: []byte{},
 				lines: []string{
-					"foo\n", "bar\n", "baz\n",
-					"qux\n",
+					"foo", "bar", "baz",
+					"qux",
 				},
 			},
 			lines: []string{
-				"foo\n", "bar\n", "baz\n",
-				"qux\n",
+				"foo", "bar", "baz",
+				"qux",
 			},
 		},
 		{
@@ -60,12 +60,12 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: []byte("qu"),
 				lines: []string{
-					"foo\n", "bar\n", "baz\n",
-					"qux\n",
+					"foo", "bar", "baz",
+					"qux",
 				},
 			},
 			lines: []string{
-				"foo\n", "bar\n", "baz\n", "qux\n",
+				"foo", "bar", "baz", "qux",
 			},
 		},
 		{
@@ -73,13 +73,13 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: []byte("corge"),
 				lines: []string{
-					"foo\n", "bar\n", "baz\n",
-					"qux\n", "quux\n",
+					"foo", "bar", "baz",
+					"qux", "quux",
 				},
 			},
 			lines: []string{
-				"foo\n", "bar\n", "baz\n",
-				"qux\n", "quux\n",
+				"foo", "bar", "baz",
+				"qux", "quux",
 			},
 		},
 		{
@@ -87,15 +87,15 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: []byte("f"),
 				lines: []string{
-					"foo\n", "bar\n", "baz\n",
-					"qux\n", "quux\n", "corge\n",
-					"grault\n", "garply\n", "waldo\n",
+					"foo", "bar", "baz",
+					"qux", "quux", "corge",
+					"grault", "garply", "waldo",
 				},
 			},
 			lines: []string{
-				"foo\n", "bar\n", "baz\n",
-				"qux\n", "quux\n", "corge\n",
-				"grault\n", "garply\n", "waldo\n",
+				"foo", "bar", "baz",
+				"qux", "quux", "corge",
+				"grault", "garply", "waldo",
 			},
 		},
 		{
@@ -103,15 +103,15 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: []byte("fre"),
 				lines: []string{
-					"foo\n", "bar\n", "baz\n",
-					"qux\n", "quux\n", "corge\n",
-					"grault\n", "garply\n", "waldo\n",
+					"foo", "bar", "baz",
+					"qux", "quux", "corge",
+					"grault", "garply", "waldo",
 				},
 			},
 			lines: []string{
-				"foo\n", "bar\n", "baz\n",
-				"qux\n", "quux\n", "corge\n",
-				"grault\n", "garply\n", "waldo\n",
+				"foo", "bar", "baz",
+				"qux", "quux", "corge",
+				"grault", "garply", "waldo",
 			},
 		},
 		{
@@ -119,17 +119,17 @@ func TestLineBufferCore(t *testing.T) {
 			buffer: &LineBuffer{
 				tmp: []byte{},
 				lines: []string{
-					"foo\n", "bar\n", "baz\n",
-					"qux\n", "quux\n", "corge\n",
-					"grault\n", "garply\n", "waldo\n",
-					"fred\n",
+					"foo", "bar", "baz",
+					"qux", "quux", "corge",
+					"grault", "garply", "waldo",
+					"fred",
 				},
 			},
 			lines: []string{
-				"foo\n", "bar\n", "baz\n",
-				"qux\n", "quux\n", "corge\n",
-				"grault\n", "garply\n", "waldo\n",
-				"fred\n",
+				"foo", "bar", "baz",
+				"qux", "quux", "corge",
+				"grault", "garply", "waldo",
+				"fred",
 			},
 		},
 	} {
@@ -151,7 +151,7 @@ func TestLineBufferPubSub(t *testing.T) {
 
 	_, err := b.Write([]byte("foo\nbar\nbaz"))
 	require.NoError(err)
-	for _, expected := range []string{"foo\n", "bar\n", ""} {
+	for _, expected := range []string{"foo", "bar", ""} {
 		select {
 		case actual := <-ch:
 			require.Equal(expected, actual)

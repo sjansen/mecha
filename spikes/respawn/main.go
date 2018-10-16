@@ -63,8 +63,10 @@ func spawn(ctx context.Context, i int) int {
 		select {
 		case line := <-stdout:
 			os.Stdout.Write([]byte(line))
+			os.Stdout.Write([]byte("\n"))
 		case line := <-stderr:
 			os.Stderr.Write([]byte(line))
+			os.Stderr.Write([]byte("\n"))
 		case s := <-status:
 			return s.Status
 		}
