@@ -41,7 +41,7 @@ func main() {
 		context.Background(),
 		60*time.Second,
 	)
-	stdout, stderr, status, err := subprocess.Run(ctx, pytest, "-v")
+	p, err := subprocess.Run(ctx, pytest, "-v")
 	if err != nil {
 		die(err)
 	}
@@ -50,7 +50,7 @@ func main() {
 	go func() {
 		green := color.New(color.FgGreen)
 		var progress, testfile string
-		for line := range stdout {
+		for line := range p.Stdout {
 			if match := testcase.FindStringSubmatch(line); match == nil {
 				if testfile != "" {
 					testfile = ""
@@ -82,13 +82,13 @@ func main() {
 	}()
 	go func() {
 		red := color.New(color.FgRed)
-		for line := range stderr {
+		for line := range p.Stderr {
 			red.Print(line, "\n")
 		}
 	}()
 
-	s := <-status
-	if s.Error != nil {
-		die(s.Error)
+	status := <-p.Status
+	if status.Error != nil {
+		die(status.Error)
 	}
 }

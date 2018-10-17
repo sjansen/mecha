@@ -48,7 +48,7 @@ func makeSomeNoise() {
 }
 
 func spawn(ctx context.Context, i int) int {
-	stdout, stderr, status, err := subprocess.Run(
+	p, err := subprocess.Run(
 		ctx,
 		os.Args[0],
 		"--as-test-child",
@@ -61,14 +61,14 @@ func spawn(ctx context.Context, i int) int {
 
 	for {
 		select {
-		case line := <-stdout:
+		case line := <-p.Stdout:
 			os.Stdout.Write([]byte(line))
 			os.Stdout.Write([]byte("\n"))
-		case line := <-stderr:
+		case line := <-p.Stderr:
 			os.Stderr.Write([]byte(line))
 			os.Stderr.Write([]byte("\n"))
-		case s := <-status:
-			return s.Status
+		case status := <-p.Status:
+			return status.Code
 		}
 	}
 }

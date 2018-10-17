@@ -78,7 +78,7 @@ func startChildren() {
 	wg := &sync.WaitGroup{}
 	for i := 1; i <= children; i++ {
 		fmt.Fprintln(os.Stderr, "starting:", i)
-		stdout, stderr, status, err := subprocess.Run(
+		p, err := subprocess.Run(
 			ctx,
 			os.Args[0],
 			"--as-test-child",
@@ -89,17 +89,17 @@ func startChildren() {
 		}
 
 		fmt.Fprintln(os.Stderr, "started:", i)
-		startReader(wg, green, stdout)
-		startReader(wg, red, stderr)
+		startReader(wg, green, p.Stdout)
+		startReader(wg, red, p.Stderr)
 
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			s := <-status
-			if s.Error != nil {
-				fmt.Fprintf(os.Stderr, "stopped: %d (err=%s)\n", i, s.Error)
+			status := <-p.Status
+			if status.Error != nil {
+				fmt.Fprintf(os.Stderr, "stopped: %d (err=%s)\n", i, status.Error)
 			} else {
-				fmt.Fprintf(os.Stderr, "stopped: %d (rc=%d)\n", i, s.Status)
+				fmt.Fprintf(os.Stderr, "stopped: %d (rc=%d)\n", i, status.Code)
 			}
 		}(i)
 	}

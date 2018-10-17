@@ -52,7 +52,7 @@ func startChildren() {
 
 	addStreamPair := func() {
 		// TODO report status
-		stdout, stderr, _, err := subprocess.Run(
+		p, err := subprocess.Run(
 			ctx,
 			os.Args[0],
 			"--as-test-child",
@@ -61,7 +61,7 @@ func startChildren() {
 			die(err)
 		}
 
-		screen.AddStreamPair("TODO", stdout, stderr)
+		screen.AddStreamPair("TODO", p.Stdout, p.Stderr)
 	}
 
 	screen.AddMenuItem("Add Row", addStreamPair).
