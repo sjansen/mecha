@@ -7,6 +7,7 @@ import (
 
 	"github.com/chzyer/readline"
 	"github.com/google/skylark"
+	"github.com/google/skylark/resolve"
 	"github.com/google/skylark/syntax"
 )
 
@@ -14,10 +15,13 @@ const ps1 = "> "
 const ps2 = ": "
 
 var completer = readline.NewPrefixCompleter(
-	readline.PcItem("print"),
+	readline.PcItem("print("),
 )
 
 func main() {
+	resolve.AllowFloat = true
+	resolve.AllowSet = true
+
 	l, err := readline.NewEx(&readline.Config{
 		AutoComplete:           completer,
 		DisableAutoSaveHistory: true,
@@ -31,7 +35,7 @@ func main() {
 	}
 	defer l.Close()
 
-	globals := skylark.StringDict{}
+	predeclared := skylark.StringDict{}
 	thread := &skylark.Thread{}
 
 	var lines []string
@@ -65,11 +69,15 @@ func main() {
 
 		_, err = syntax.ParseExpr("<stdin>", line, 0)
 		if err != nil {
-			if _, err := skylark.ExecFile(thread, "<stdin>", buffer, globals); err != nil {
+			if globals, err := skylark.ExecFile(thread, "<stdin>", buffer, predeclared); err != nil {
 				fmt.Println(err)
+			} else {
+				for k, v := range globals {
+					predeclared[k] = v
+				}
 			}
 		} else {
-			if v, err := skylark.Eval(thread, "<stdin>", buffer, globals); err != nil {
+			if v, err := skylark.Eval(thread, "<stdin>", buffer, predeclared); err != nil {
 				fmt.Println(err.Error())
 			} else {
 				fmt.Println(v.String())
