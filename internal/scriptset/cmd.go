@@ -5,7 +5,7 @@ import (
 )
 
 type cmd struct {
-	// TODO args []string
+	args []string
 }
 
 func (c *cmd) Freeze() {

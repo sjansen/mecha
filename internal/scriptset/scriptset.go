@@ -1,6 +1,7 @@
 package scriptset
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/google/skylark"
@@ -40,11 +41,27 @@ func (set *ScriptSet) Add(filename string, r io.Reader) error {
 
 func (set *ScriptSet) cmd(
 	thread *skylark.Thread,
-	_ *skylark.Builtin,
+	fn *skylark.Builtin,
 	args skylark.Tuple,
 	kwargs []skylark.Tuple,
 ) (skylark.Value, error) {
-	return &cmd{}, nil
+	tmp := make([]string, 0, len(args))
+	for _, val := range args {
+		switch x := val.(type) {
+		case skylark.Float:
+			tmp = append(tmp, x.String())
+		case skylark.Int:
+			tmp = append(tmp, x.String())
+		case skylark.String:
+			tmp = append(tmp, x.GoString())
+		default:
+			err := fmt.Errorf(
+				"%s: got %s, want string, int, or float", fn.Name(), val.Type(),
+			)
+			return nil, err
+		}
+	}
+	return &cmd{args: tmp}, nil
 }
 
 func (set *ScriptSet) script(
