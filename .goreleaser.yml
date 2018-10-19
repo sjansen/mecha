@@ -31,5 +31,6 @@ nfpm:
   - deb
   - rpm
   license: Apache 2.0
+  maintainer: Stuart Jansen <sjansen@buscaluz.org>
 release:
   prerelease: true
