@@ -1,6 +1,7 @@
 package scriptset
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -8,9 +9,9 @@ import (
 )
 
 func TestScriptParsing(t *testing.T) {
-	require := require.New(t)
+	t.Parallel()
 
-	for _, tc := range []struct {
+	tests := []struct {
 		data     string
 		expected map[string]*script
 	}{{
@@ -19,16 +20,7 @@ func TestScriptParsing(t *testing.T) {
 		    name="a",
 		    commands=cmd("date"),
 		)
-		`,
-		expected: map[string]*script{
-			"a": {
-				commands: &cmd{
-					args: []string{"date"},
-				},
-			},
-		},
-	}, {
-		data: `
+
 		script(
 		    name="b",
 		    commands=cmd("make", "-j", 42),
@@ -37,9 +29,13 @@ func TestScriptParsing(t *testing.T) {
 		script(
 		    name="c",
 		    commands=cmd("sleep", 0.5),
-		)
-		`,
+		)`,
 		expected: map[string]*script{
+			"a": {
+				commands: &cmd{
+					args: []string{"date"},
+				},
+			},
 			"b": {
 				commands: &cmd{
 					args: []string{"make", "-j", "42"},
@@ -51,15 +47,22 @@ func TestScriptParsing(t *testing.T) {
 				},
 			},
 		},
-	}} {
-		s := New()
-		require.NotNil(s)
+	}}
 
-		data := strings.Replace(tc.data, "\t", "", -1)
-		r := strings.NewReader(data)
-		err := s.Add("testcase", r)
-		require.NoError(err)
+	for i, tc := range tests {
+		tc := tc
+		t.Run(fmt.Sprintf("i=%d", i), func(t *testing.T) {
+			require := require.New(t)
+			data := strings.Replace(tc.data, "\t", "", -1)
+			t.Log(data)
 
-		require.Equal(tc.expected, s.scripts)
+			s := New()
+			require.NotNil(s)
+
+			r := strings.NewReader(data)
+			err := s.Add("testcase", r)
+			require.NoError(err)
+			require.Equal(tc.expected, s.scripts)
+		})
 	}
 }
