@@ -71,13 +71,35 @@ func (set *ScriptSet) script(
 	kwargs []skylark.Tuple,
 ) (skylark.Value, error) {
 	var name skylark.String
-	var commands *cmd
-	if err := skylark.UnpackArgs(fn.Name(), args, kwargs, "name", &name, "commands", &commands); err != nil {
+	var val skylark.Value
+	if err := skylark.UnpackArgs(fn.Name(), args, kwargs, "name", &name, "commands", &val); err != nil {
 		return nil, err
 	}
 	k := name.GoString()
-	v := &script{
-		commands: commands,
+	v := &script{}
+	switch x := val.(type) {
+	case *cmd:
+		v.commands = []*cmd{x}
+	case *skylark.List:
+		v.commands = make([]*cmd, 0, x.Len())
+		iter := x.Iterate()
+		defer iter.Done()
+		var item skylark.Value
+		for iter.Next(&item) {
+			if cmd, ok := item.(*cmd); ok {
+				v.commands = append(v.commands, cmd)
+			} else {
+				err := fmt.Errorf(
+					"%s.commands: got %s, want list of cmd", fn.Name(), val.Type(),
+				)
+				return nil, err
+			}
+		}
+	default:
+		err := fmt.Errorf(
+			"%s.commands: got %s, want cmd, list of cmd, or set of cmd", fn.Name(), val.Type(),
+		)
+		return nil, err
 	}
 	set.scripts[k] = v
 	return skylark.None, nil

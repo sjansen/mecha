@@ -1,5 +1,5 @@
 package scriptset
 
 type script struct {
-	commands *cmd
+	commands []*cmd
 }

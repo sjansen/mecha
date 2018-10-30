@@ -32,19 +32,34 @@ func TestScriptParsing(t *testing.T) {
 		)`,
 		expected: map[string]*script{
 			"a": {
-				commands: &cmd{
+				commands: []*cmd{{
 					args: []string{"date"},
-				},
+				}},
 			},
 			"b": {
-				commands: &cmd{
+				commands: []*cmd{{
 					args: []string{"make", "-j", "42"},
 				},
-			},
+				}},
 			"c": {
-				commands: &cmd{
+				commands: []*cmd{{
 					args: []string{"sleep", "0.5"},
 				},
+				}},
+		},
+	}, {
+		data: `
+		script(
+		    name="one",
+		    commands=[
+		        cmd("ls", "-l"),
+		    ],
+		)`,
+		expected: map[string]*script{
+			"one": {
+				commands: []*cmd{{
+					args: []string{"ls", "-l"},
+				}},
 			},
 		},
 	}}
