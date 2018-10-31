@@ -50,15 +50,33 @@ func TestScriptParsing(t *testing.T) {
 	}, {
 		data: `
 		script(
-		    name="one",
+		    name="list",
 		    commands=[
-		        cmd("ls", "-l"),
+		        cmd("touch", "/tmp/foo"),
+		        cmd("ls", "-l", "/tmp"),
 		    ],
+		)
+
+		script(
+		    name="set",
+		    commands=set([
+		        cmd("ddate"),
+		        cmd("fortune"),
+		    ]),
 		)`,
 		expected: map[string]*script{
-			"one": {
+			"list": {
 				commands: []*cmd{{
-					args: []string{"ls", "-l"},
+					args: []string{"touch", "/tmp/foo"},
+				}, {
+					args: []string{"ls", "-l", "/tmp"},
+				}},
+			},
+			"set": {
+				commands: []*cmd{{
+					args: []string{"ddate"},
+				}, {
+					args: []string{"fortune"},
 				}},
 			},
 		},

@@ -1,6 +1,8 @@
 package scriptset
 
 import (
+	"hash/fnv"
+
 	"github.com/google/skylark"
 )
 
@@ -13,7 +15,12 @@ func (c *cmd) Freeze() {
 }
 
 func (c *cmd) Hash() (uint32, error) {
-	return 0, errUnhashable
+	h := fnv.New32()
+	for _, arg := range c.args {
+		h.Write([]byte(arg))
+		h.Write([]byte{0})
+	}
+	return h.Sum32(), nil
 }
 
 func (c *cmd) String() string {

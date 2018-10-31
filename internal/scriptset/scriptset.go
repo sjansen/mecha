@@ -82,22 +82,17 @@ func (set *ScriptSet) script(
 		v.commands = []*cmd{x}
 	case *skylark.List:
 		v.commands = make([]*cmd, 0, x.Len())
-		iter := x.Iterate()
-		defer iter.Done()
-		var item skylark.Value
-		for iter.Next(&item) {
-			if cmd, ok := item.(*cmd); ok {
-				v.commands = append(v.commands, cmd)
-			} else {
-				err := fmt.Errorf(
-					"%s.commands: got %s, want list of cmd", fn.Name(), val.Type(),
-				)
-				return nil, err
-			}
+		if err := v.addCommands(fn.Name(), x); err != nil {
+			return nil, err
+		}
+	case *skylark.Set:
+		v.commands = make([]*cmd, 0, x.Len())
+		if err := v.addCommands(fn.Name(), x); err != nil {
+			return nil, err
 		}
 	default:
 		err := fmt.Errorf(
-			"%s.commands: got %s, want cmd, list of cmd, or set of cmd", fn.Name(), val.Type(),
+			"%s: got %s, want cmd, list of cmd, or set of cmd", fn.Name(), val.Type(),
 		)
 		return nil, err
 	}
