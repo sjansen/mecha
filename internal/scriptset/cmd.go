@@ -1,6 +1,7 @@
 package scriptset
 
 import (
+	"fmt"
 	"hash/fnv"
 
 	"github.com/google/skylark"
@@ -8,6 +9,26 @@ import (
 
 type cmd struct {
 	args []string
+}
+
+func (c *cmd) init(args skylark.Tuple) error {
+	tmp := make([]string, 0, len(args))
+	for _, val := range args {
+		switch x := val.(type) {
+		case skylark.Float:
+			tmp = append(tmp, x.String())
+		case skylark.Int:
+			tmp = append(tmp, x.String())
+		case skylark.String:
+			tmp = append(tmp, x.GoString())
+		default:
+			return fmt.Errorf(
+				"cmd: got %s, want string, int, or float", val.Type(),
+			)
+		}
+	}
+	c.args = tmp
+	return nil
 }
 
 func (c *cmd) Freeze() {

@@ -45,23 +45,17 @@ func (set *ScriptSet) cmd(
 	args skylark.Tuple,
 	kwargs []skylark.Tuple,
 ) (skylark.Value, error) {
-	tmp := make([]string, 0, len(args))
-	for _, val := range args {
-		switch x := val.(type) {
-		case skylark.Float:
-			tmp = append(tmp, x.String())
-		case skylark.Int:
-			tmp = append(tmp, x.String())
-		case skylark.String:
-			tmp = append(tmp, x.GoString())
-		default:
-			err := fmt.Errorf(
-				"%s: got %s, want string, int, or float", fn.Name(), val.Type(),
-			)
-			return nil, err
-		}
+	if len(kwargs) > 0 {
+		err := fmt.Errorf("%s: unexpected keyword arguments", fn.Name())
+		return nil, err
 	}
-	return &cmd{args: tmp}, nil
+
+	cmd := &cmd{}
+	if err := cmd.init(args); err != nil {
+		return nil, err
+	}
+
+	return cmd, nil
 }
 
 func (set *ScriptSet) script(
