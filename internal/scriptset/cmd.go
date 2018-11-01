@@ -28,7 +28,10 @@ func (c *cmd) String() string {
 }
 
 func (c *cmd) Truth() skylark.Bool {
-	return skylark.True
+	if len(c.args) > 0 {
+		return skylark.True
+	}
+	return skylark.False
 }
 
 func (c *cmd) Type() string {
