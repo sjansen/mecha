@@ -1,0 +1,17 @@
+# vim: set syntax=python:
+
+script(
+    name="list",
+    commands=[
+        cmd("touch", "/tmp/foo"),
+        cmd("ls", "-l", "/tmp"),
+    ],
+)
+
+script(
+    name="set",
+    commands=set([
+        cmd("ddate"),
+        cmd("fortune"),
+    ]),
+)

@@ -1,0 +1,37 @@
+{
+  "scripts": {
+    "list": {
+      "concurrent": false,
+      "commands": [
+        {
+          "args": [
+            "touch",
+            "/tmp/foo"
+          ]
+        },
+        {
+          "args": [
+            "ls",
+            "-l",
+            "/tmp"
+          ]
+        }
+      ]
+    },
+    "set": {
+      "concurrent": true,
+      "commands": [
+        {
+          "args": [
+            "ddate"
+          ]
+        },
+        {
+          "args": [
+            "fortune"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -17,13 +17,13 @@ type ScriptSet struct {
 	globals skylark.StringDict
 	thread  *skylark.Thread
 
-	scripts map[string]*script
+	Scripts map[string]*script `json:"scripts"`
 }
 
 func New() *ScriptSet {
 	s := &ScriptSet{
 		thread:  &skylark.Thread{},
-		scripts: make(map[string]*script),
+		Scripts: make(map[string]*script),
 	}
 	s.globals = skylark.StringDict{
 		"cmd":    skylark.NewBuiltin("cmd", s.cmd),
@@ -80,6 +80,6 @@ func (set *ScriptSet) script(
 		return nil, err
 	}
 
-	set.scripts[name.GoString()] = script
+	set.Scripts[name.GoString()] = script
 	return skylark.None, nil
 }

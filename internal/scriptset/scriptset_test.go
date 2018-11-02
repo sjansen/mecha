@@ -1,101 +1,68 @@
 package scriptset
 
 import (
-	"fmt"
-	"strings"
+	"encoding/json"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestScriptParsing(t *testing.T) {
 	t.Parallel()
 
-	tests := []struct {
-		data     string
-		expected map[string]*script
-	}{{
-		data: `
-		script(
-		    name="a",
-		    commands=cmd("date"),
-		)
+	testcases, err := filepath.Glob("testdata/*.sky")
+	if err != nil {
+		t.Log(err)
+		t.FailNow()
+	}
 
-		script(
-		    name="b",
-		    commands=cmd("make", "-j", 42),
-		)
-
-		script(
-		    name="c",
-		    commands=cmd("sleep", 0.5),
-		)`,
-		expected: map[string]*script{
-			"a": {
-				commands: []*cmd{{
-					args: []string{"date"},
-				}},
-			},
-			"b": {
-				commands: []*cmd{{
-					args: []string{"make", "-j", "42"},
-				},
-				}},
-			"c": {
-				commands: []*cmd{{
-					args: []string{"sleep", "0.5"},
-				},
-				}},
-		},
-	}, {
-		data: `
-		script(
-		    name="list",
-		    commands=[
-		        cmd("touch", "/tmp/foo"),
-		        cmd("ls", "-l", "/tmp"),
-		    ],
-		)
-
-		script(
-		    name="set",
-		    commands=set([
-		        cmd("ddate"),
-		        cmd("fortune"),
-		    ]),
-		)`,
-		expected: map[string]*script{
-			"list": {
-				commands: []*cmd{{
-					args: []string{"touch", "/tmp/foo"},
-				}, {
-					args: []string{"ls", "-l", "/tmp"},
-				}},
-			},
-			"set": {
-				commands: []*cmd{{
-					args: []string{"ddate"},
-				}, {
-					args: []string{"fortune"},
-				}},
-			},
-		},
-	}}
-
-	for i, tc := range tests {
-		tc := tc
-		t.Run(fmt.Sprintf("i=%d", i), func(t *testing.T) {
+	for _, path := range testcases {
+		path := path
+		basename := filepath.Base(path)
+		t.Run(basename, func(t *testing.T) {
+			assert := assert.New(t)
 			require := require.New(t)
-			data := strings.Replace(tc.data, "\t", "", -1)
-			t.Log(data)
 
-			s := New()
-			require.NotNil(s)
-
-			r := strings.NewReader(data)
-			err := s.Add("testcase", r)
+			f, err := os.Open(path)
+			defer f.Close()
 			require.NoError(err)
-			require.Equal(tc.expected, s.scripts)
+
+			scriptset := New()
+			require.NotNil(scriptset)
+			err = scriptset.Add(path, f)
+			require.NoError(err)
+
+			ext := filepath.Ext(path)
+			path = path[0:len(path)-len(ext)] + ".json"
+			tmp, err := ioutil.ReadFile(path)
+			require.NoError(err)
+
+			expected := &ScriptSet{}
+			err = json.Unmarshal(tmp, expected)
+			require.NoError(err)
+
+			scriptset.globals = nil
+			scriptset.thread = nil
+			if !assert.Equal(expected, scriptset) {
+				actual, err := json.MarshalIndent(scriptset, "", "  ")
+				require.NoError(err)
+
+				f, err := ioutil.TempFile("", "actual.*.json")
+				require.NoError(err)
+				defer f.Close()
+
+				if _, err := f.Write(actual); err == nil {
+					t.Log(
+						"Temp JSON file created to facilitate debugging.",
+						"\nexpected:", path,
+						"\nactual:", f.Name(),
+					)
+				}
+			}
 		})
 	}
 }

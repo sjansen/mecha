@@ -8,7 +8,7 @@ import (
 )
 
 type cmd struct {
-	args []string
+	Args []string `json:"args"`
 }
 
 func (c *cmd) init(args skylark.Tuple) error {
@@ -27,7 +27,7 @@ func (c *cmd) init(args skylark.Tuple) error {
 			)
 		}
 	}
-	c.args = tmp
+	c.Args = tmp
 	return nil
 }
 
@@ -37,7 +37,7 @@ func (c *cmd) Freeze() {
 
 func (c *cmd) Hash() (uint32, error) {
 	h := fnv.New32()
-	for _, arg := range c.args {
+	for _, arg := range c.Args {
 		h.Write([]byte(arg))
 		h.Write([]byte{0})
 	}
@@ -49,7 +49,7 @@ func (c *cmd) String() string {
 }
 
 func (c *cmd) Truth() skylark.Bool {
-	if len(c.args) > 0 {
+	if len(c.Args) > 0 {
 		return skylark.True
 	}
 	return skylark.False

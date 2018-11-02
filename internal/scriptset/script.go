@@ -7,7 +7,8 @@ import (
 )
 
 type script struct {
-	commands []*cmd
+	Concurrent bool   `json:"concurrent"`
+	Commands   []*cmd `json:"commands"`
 }
 
 func (s *script) init(
@@ -15,12 +16,15 @@ func (s *script) init(
 ) error {
 	switch x := commands.(type) {
 	case *cmd:
-		s.commands = []*cmd{x}
+		s.Concurrent = false
+		s.Commands = []*cmd{x}
 	case *skylark.List:
+		s.Concurrent = false
 		if err := s.initCommands(x.Len(), x); err != nil {
 			return err
 		}
 	case *skylark.Set:
+		s.Concurrent = true
 		if err := s.initCommands(x.Len(), x); err != nil {
 			return err
 		}
@@ -34,7 +38,7 @@ func (s *script) init(
 }
 
 func (s *script) initCommands(n int, x skylark.Iterable) error {
-	s.commands = make([]*cmd, 0, n)
+	s.Commands = make([]*cmd, 0, n)
 
 	iter := x.Iterate()
 	defer iter.Done()
@@ -42,7 +46,7 @@ func (s *script) initCommands(n int, x skylark.Iterable) error {
 	var item skylark.Value
 	for iter.Next(&item) {
 		if cmd, ok := item.(*cmd); ok {
-			s.commands = append(s.commands, cmd)
+			s.Commands = append(s.Commands, cmd)
 		} else {
 			return fmt.Errorf(
 				"script: got %s, want cmd", x.Type(),

@@ -1,0 +1,37 @@
+{
+  "scripts": {
+    "a": {
+      "concurrent": false,
+      "commands": [
+        {
+          "args": [
+            "date"
+          ]
+        }
+      ]
+    },
+    "b": {
+      "concurrent": false,
+      "commands": [
+        {
+          "args": [
+            "make",
+            "-j",
+            "42"
+          ]
+        }
+      ]
+    },
+    "c": {
+      "concurrent": false,
+      "commands": [
+        {
+          "args": [
+            "sleep",
+            "0.5"
+          ]
+        }
+      ]
+    }
+  }
+}

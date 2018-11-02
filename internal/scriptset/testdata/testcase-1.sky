@@ -1,0 +1,16 @@
+# vim: set syntax=python:
+
+script(
+    name="a",
+    commands=cmd("date"),
+)
+
+script(
+    name="b",
+    commands=cmd("make", "-j", 42),
+)
+
+script(
+    name="c",
+    commands=cmd("sleep", 0.5),
+)
