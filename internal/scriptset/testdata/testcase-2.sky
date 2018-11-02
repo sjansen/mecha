@@ -2,7 +2,7 @@
 
 script(
     name="list",
-    commands=[
+    steps=[
         cmd("touch", "/tmp/foo"),
         cmd("ls", "-l", "/tmp"),
     ],
@@ -10,7 +10,7 @@ script(
 
 script(
     name="set",
-    commands=set([
+    steps=set([
         cmd("ddate"),
         cmd("fortune"),
     ]),

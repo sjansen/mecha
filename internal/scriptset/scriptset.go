@@ -65,18 +65,18 @@ func (set *ScriptSet) script(
 	kwargs []skylark.Tuple,
 ) (skylark.Value, error) {
 	var name skylark.String
-	var commands skylark.Value
+	var steps skylark.Value
 	err := skylark.UnpackArgs(
 		fn.Name(), args, kwargs,
 		"name", &name,
-		"commands", &commands,
+		"steps", &steps,
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	script := &script{}
-	if err := script.init(commands); err != nil {
+	if err := script.init(steps); err != nil {
 		return nil, err
 	}
 

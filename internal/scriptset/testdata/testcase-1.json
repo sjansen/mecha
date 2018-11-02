@@ -2,7 +2,7 @@
   "scripts": {
     "a": {
       "concurrent": false,
-      "commands": [
+      "steps": [
         {
           "args": [
             "date"
@@ -12,7 +12,7 @@
     },
     "b": {
       "concurrent": false,
-      "commands": [
+      "steps": [
         {
           "args": [
             "make",
@@ -24,7 +24,7 @@
     },
     "c": {
       "concurrent": false,
-      "commands": [
+      "steps": [
         {
           "args": [
             "sleep",

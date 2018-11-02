@@ -2,7 +2,7 @@
   "scripts": {
     "list": {
       "concurrent": false,
-      "commands": [
+      "steps": [
         {
           "args": [
             "touch",
@@ -20,7 +20,7 @@
     },
     "set": {
       "concurrent": true,
-      "commands": [
+      "steps": [
         {
           "args": [
             "ddate"
