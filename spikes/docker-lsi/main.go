@@ -17,11 +17,13 @@ func main() {
 		panic(err)
 	}
 	for _, img := range imgs {
-		fmt.Println("ID: ", img.ID)
-		fmt.Println("RepoTags: ", img.RepoTags)
-		fmt.Println("Created: ", img.Created)
-		fmt.Println("Size: ", img.Size)
-		fmt.Println("VirtualSize: ", img.VirtualSize)
-		fmt.Println("ParentId: ", img.ParentID)
+		fmt.Println("Labels: ", img.Labels)
+		fmt.Println("  ID: ", img.ID)
+		fmt.Println("  Created: ", img.Created)
+		fmt.Println("  ParentId: ", img.ParentID)
+		fmt.Println("  RepoDigests: ", img.RepoDigests)
+		fmt.Println("  RepoTags: ", img.RepoTags)
+		fmt.Println("  Size: ", img.Size)
+		fmt.Println("  VirtualSize: ", img.VirtualSize)
 	}
 }
