@@ -69,4 +69,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	status, err := client.WaitContainer(c.ID)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("--")
+
+	fmt.Println("exit =", status)
 }
