@@ -45,6 +45,15 @@ func main() {
 		panic(err)
 	}
 
+	defer func() {
+		_ = client.StopContainer(c.ID, 1)
+		_ = client.RemoveContainer(docker.RemoveContainerOptions{
+			ID:            c.ID,
+			RemoveVolumes: true,
+			Force:         true,
+		})
+	}()
+
 	fmt.Println("ID: ", c.ID)
 
 	attached := make(chan struct{})
