@@ -2,89 +2,86 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"time"
 
-	docker "github.com/fsouza/go-dockerclient"
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/stdcopy"
+
+	"golang.org/x/net/context"
 )
 
 func main() {
-	endpoint := "unix:///var/run/docker.sock"
-	client, err := docker.NewClient(endpoint)
+	ctx := context.Background()
+	cli, err := client.NewEnvClient()
 	if err != nil {
 		panic(err)
 	}
 
-	err = client.PullImage(
-		docker.PullImageOptions{
-			Repository:   "hello-world",
-			Tag:          "latest",
-			OutputStream: os.Stdout,
-		},
-		docker.AuthConfiguration{},
-	)
+	pull, err := cli.ImagePull(ctx, "hello-world", types.ImagePullOptions{})
 	if err != nil {
 		panic(err)
 	}
+
+	io.Copy(os.Stdout, pull)
+	pull.Close()
 
 	fmt.Println("--")
 
-	c, err := client.CreateContainer(docker.CreateContainerOptions{
-		Name: "",
-		Config: &docker.Config{
-			Image:        "hello-world",
-			AttachStdin:  false,
-			AttachStdout: true,
-			AttachStderr: true,
-			Tty:          false,
-		},
-		HostConfig:       nil,
-		NetworkingConfig: nil,
-		Context:          nil,
-	})
+	resp, err := cli.ContainerCreate(ctx, &container.Config{
+		Image:        "hello-world",
+		AttachStdin:  false,
+		AttachStdout: true,
+		AttachStderr: true,
+		Tty:          false,
+	}, nil, nil, "")
 	if err != nil {
 		panic(err)
 	}
 
 	defer func() {
-		_ = client.StopContainer(c.ID, 1)
-		_ = client.RemoveContainer(docker.RemoveContainerOptions{
-			ID:            c.ID,
-			RemoveVolumes: true,
+		fmt.Println("--")
+		fmt.Println("cleaning...")
+		wait := 1 * time.Second
+		_ = cli.ContainerStop(ctx, resp.ID, &wait)
+		_ = cli.ContainerRemove(ctx, resp.ID, types.ContainerRemoveOptions{
 			Force:         true,
+			RemoveLinks:   false,
+			RemoveVolumes: true,
 		})
 	}()
 
-	fmt.Println("ID: ", c.ID)
+	fmt.Println("ID: ", resp.ID)
 
-	attached := make(chan struct{})
+	fmt.Println("--")
+
+	err = cli.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{})
+	if err != nil {
+		panic(err)
+	}
+
 	go func() {
-		_ = client.AttachToContainer(docker.AttachToContainerOptions{
-			Container:    c.ID,
-			OutputStream: os.Stdout,
-			ErrorStream:  os.Stderr,
-			Stdin:        false,
-			Stdout:       true,
-			Stderr:       true,
-			Stream:       true,
-			Success:      attached,
-		})
+		out, err := cli.ContainerLogs(ctx, resp.ID, types.ContainerLogsOptions{ShowStdout: true})
+		if err != nil {
+			panic(err)
+		}
+		stdcopy.StdCopy(os.Stdout, os.Stderr, out)
 	}()
-	<-attached
-	attached <- struct{}{}
+
+	statusCh, errCh := cli.ContainerWait(ctx, resp.ID, container.WaitConditionNotRunning)
 
 	fmt.Println("--")
 
-	err = client.StartContainer(c.ID, nil)
-	if err != nil {
-		panic(err)
+	select {
+	case err := <-errCh:
+		if err != nil {
+			panic(err)
+		}
+	case status := <-statusCh:
+		fmt.Println("exit =", status.StatusCode)
 	}
 
-	status, err := client.WaitContainer(c.ID)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("--")
-
-	fmt.Println("exit =", status)
 }
