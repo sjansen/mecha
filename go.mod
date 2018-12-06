@@ -11,6 +11,8 @@ require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/containerd/continuity v0.0.0-20181027224239-bea7585dbfac // indirect
+	github.com/docker/distribution v2.7.0+incompatible // indirect
+	github.com/docker/docker v0.7.3-0.20180827131323-0c5f8d2b9b23
 	github.com/dustin/go-humanize v1.0.0
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/fatih/color v1.7.0
