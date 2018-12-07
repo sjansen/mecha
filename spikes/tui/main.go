@@ -64,8 +64,8 @@ func startChildren() {
 		screen.AddStreamPair("TODO", p.Stdout, p.Stderr)
 	}
 
-	screen.AddMenuItem("Add Row", addStreamPair).
-		AddMenuItem("Quit", screen.Stop)
+	screen.AddMenuItem("add-row", "Add Row", addStreamPair).
+		AddMenuItem("quit", "Quit", screen.Stop)
 
 	for i := 0; i < 3; i++ {
 		addStreamPair()

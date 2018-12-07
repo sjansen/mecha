@@ -59,8 +59,8 @@ func NewScreen() *Screen {
 		}
 		return e
 	})
-	menu.SetSelectedFunc(func(_ int, name string, _ string, _ rune) {
-		if action, ok := screen.menuItems[name]; ok {
+	menu.SetSelectedFunc(func(_ int, _ string, id string, _ rune) {
+		if action, ok := screen.menuItems[id]; ok {
 			action()
 		}
 	})
@@ -68,9 +68,9 @@ func NewScreen() *Screen {
 	return screen
 }
 
-func (s *Screen) AddMenuItem(name string, action MenuAction) *Screen {
-	s.menu.AddItem(name, "", 0, nil)
-	s.menuItems[name] = action
+func (s *Screen) AddMenuItem(id, label string, action MenuAction) *Screen {
+	s.menu.AddItem(label, id, 0, nil)
+	s.menuItems[id] = action
 	return s
 }
 
