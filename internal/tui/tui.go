@@ -13,6 +13,8 @@ type Screen struct {
 	menuItems map[string]MenuAction
 	rows      *tview.Flex
 	views     []*tview.TextView
+	statusbar *tview.Table
+	statuses  map[string]*tview.TableCell
 }
 
 type MenuAction func()
@@ -27,20 +29,26 @@ func NewScreen() *Screen {
 	menu.SetBorderPadding(1, 1, 1, 1)
 	rows := tview.NewFlex().
 		SetDirection(tview.FlexRow)
+	statusbar := tview.NewTable().
+		SetBorders(false)
+	statusbar.SetBorderPadding(1, 1, 1, 1)
 	screen := &Screen{
 		app:       app,
 		menu:      menu,
 		menuItems: make(map[string]MenuAction, 0),
 		rows:      rows,
 		views:     make([]*tview.TextView, 0),
+		statusbar: statusbar,
+		statuses:  make(map[string]*tview.TableCell, 0),
 	}
 
 	// layout
 	grid := tview.NewGrid().
 		SetColumns(15, 0).
-		SetRows(0).
-		AddItem(menu, 0, 0, 1, 1, 0, 0, true).
-		AddItem(rows, 0, 1, 1, 1, 0, 0, false)
+		SetRows(3, 0).
+		AddItem(menu, 0, 0, 2, 1, 5, 20, true).
+		AddItem(statusbar, 0, 1, 1, 1, 0, 0, true).
+		AddItem(rows, 1, 1, 1, 1, 0, 0, false)
 	app.SetRoot(grid, true)
 
 	// event handlers
@@ -71,6 +79,32 @@ func NewScreen() *Screen {
 func (s *Screen) AddMenuItem(id, label string, action MenuAction) *Screen {
 	s.menu.AddItem(label, id, 0, nil)
 	s.menuItems[id] = action
+	return s
+}
+
+func (s *Screen) AddStatusItem(id, label string) *Screen {
+	c := tview.NewTableCell("").
+		SetExpansion(2)
+	s.statuses[id] = c
+
+	t := s.statusbar
+	n := t.GetColumnCount()
+	t.SetCell(0, n, tview.NewTableCell(label))
+	t.SetCell(0, n+1, c)
+
+	return s
+}
+
+func (s *Screen) UpdateStatusItem(id, msg string, ok bool) *Screen {
+	c := s.statuses[id]
+	if ok {
+		c.SetText("✓ " + msg).
+			SetTextColor(tcell.ColorGreen)
+	} else {
+		c.SetText("x " + msg).
+			SetTextColor(tcell.ColorRed)
+	}
+	s.app.Draw()
 	return s
 }
 

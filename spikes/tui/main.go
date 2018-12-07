@@ -65,8 +65,24 @@ func startChildren() {
 	}
 
 	screen.AddMenuItem("add-row", "Add Row", addStreamPair).
-		AddMenuItem("quit", "Quit", screen.Stop)
+		AddMenuItem("quit", "Quit", screen.Stop).
+		AddStatusItem("clock", "Clock:").
+		AddStatusItem("disk", "Disk:").
+		AddStatusItem("ram", "RAM:")
 
+	for _, id := range []string{"clock", "disk", "ram"} {
+		id := id
+		go func() {
+			for {
+				if ok := rand.Intn(100) > 20; ok {
+					screen.UpdateStatusItem(id, "PASS", ok)
+				} else {
+					screen.UpdateStatusItem(id, "FAIL", ok)
+				}
+				time.Sleep(1 * time.Second)
+			}
+		}()
+	}
 	for i := 0; i < 3; i++ {
 		addStreamPair()
 	}
