@@ -1,22 +1,24 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
-	docker "github.com/fsouza/go-dockerclient"
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/client"
 )
 
 func main() {
-	endpoint := "unix:///var/run/docker.sock"
-	client, err := docker.NewClient(endpoint)
+	cli, err := client.NewEnvClient()
 	if err != nil {
 		panic(err)
 	}
-	imgs, err := client.ListImages(docker.ListImagesOptions{All: false})
+
+	images, err := cli.ImageList(context.Background(), types.ImageListOptions{})
 	if err != nil {
 		panic(err)
 	}
-	for _, img := range imgs {
+	for _, img := range images {
 		fmt.Println("Labels: ", img.Labels)
 		fmt.Println("  ID: ", img.ID)
 		fmt.Println("  Created: ", img.Created)
