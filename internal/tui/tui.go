@@ -7,7 +7,7 @@ import (
 	"github.com/rivo/tview"
 )
 
-type Screen struct {
+type DemoScreen struct {
 	app       *tview.Application
 	menu      *tview.List
 	menuItems map[string]MenuAction
@@ -19,7 +19,7 @@ type Screen struct {
 
 type MenuAction func()
 
-func NewScreen() *Screen {
+func NewDemoScreen() *DemoScreen {
 	app := tview.NewApplication()
 
 	// components
@@ -32,7 +32,7 @@ func NewScreen() *Screen {
 	statusbar := tview.NewTable().
 		SetBorders(false)
 	statusbar.SetBorderPadding(1, 1, 1, 1)
-	screen := &Screen{
+	screen := &DemoScreen{
 		app:       app,
 		menu:      menu,
 		menuItems: make(map[string]MenuAction, 0),
@@ -76,13 +76,13 @@ func NewScreen() *Screen {
 	return screen
 }
 
-func (s *Screen) AddMenuItem(id, label string, action MenuAction) *Screen {
+func (s *DemoScreen) AddMenuItem(id, label string, action MenuAction) *DemoScreen {
 	s.menu.AddItem(label, id, 0, nil)
 	s.menuItems[id] = action
 	return s
 }
 
-func (s *Screen) AddStatusItem(id, label string) *Screen {
+func (s *DemoScreen) AddStatusItem(id, label string) *DemoScreen {
 	c := tview.NewTableCell("").
 		SetExpansion(2)
 	s.statuses[id] = c
@@ -95,7 +95,8 @@ func (s *Screen) AddStatusItem(id, label string) *Screen {
 	return s
 }
 
-func (s *Screen) UpdateStatusItem(id, msg string, ok bool) *Screen {
+func (s *DemoScreen) UpdateStatusItem(id, msg string, ok bool) *DemoScreen {
+	// TODO use app.QueueUpdate() to make thread-safe
 	c := s.statuses[id]
 	if ok {
 		c.SetText("✓ " + msg).
@@ -108,7 +109,7 @@ func (s *Screen) UpdateStatusItem(id, msg string, ok bool) *Screen {
 	return s
 }
 
-func (s *Screen) AddStreamPair(title string, stdout, stderr <-chan string) {
+func (s *DemoScreen) AddStreamPair(title string, stdout, stderr <-chan string) {
 	view := tview.NewTextView().
 		SetDynamicColors(true)
 	view.SetBorder(true).
@@ -152,15 +153,15 @@ func (s *Screen) AddStreamPair(title string, stdout, stderr <-chan string) {
 	}()
 }
 
-func (s *Screen) Run() error {
+func (s *DemoScreen) Run() error {
 	return s.app.Run()
 }
 
-func (s *Screen) Stop() {
+func (s *DemoScreen) Stop() {
 	s.app.Stop()
 }
 
-func (s *Screen) focusNext() {
+func (s *DemoScreen) focusNext() {
 	if s.menu.HasFocus() {
 		s.menu.SetSelectedBackgroundColor(tcell.ColorWhite)
 		if len(s.views) > 0 {
@@ -186,7 +187,7 @@ func (s *Screen) focusNext() {
 	}
 }
 
-func (s *Screen) focusPrev() {
+func (s *DemoScreen) focusPrev() {
 	if s.menu.HasFocus() {
 		s.menu.SetSelectedBackgroundColor(tcell.ColorWhite)
 		if len(s.views) > 0 {

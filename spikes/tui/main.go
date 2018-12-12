@@ -46,7 +46,7 @@ func makeSomeNoise() {
 }
 
 func startChildren() {
-	screen := tui.NewScreen()
+	screen := tui.NewDemoScreen()
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
