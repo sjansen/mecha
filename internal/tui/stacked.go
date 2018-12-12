@@ -6,10 +6,10 @@ import (
 )
 
 type StackedTextViews struct {
-	app       *tview.Application
-	rows      *tview.Flex
-	statusbar *tview.Table
-	statuses  map[string]*tview.TableCell
+	statusbar
+
+	app  *tview.Application
+	rows *tview.Flex
 }
 
 func NewStackedTextViews() *StackedTextViews {
@@ -18,15 +18,11 @@ func NewStackedTextViews() *StackedTextViews {
 	// components
 	rows := tview.NewFlex().
 		SetDirection(tview.FlexRow)
-	statusbar := tview.NewTable().
-		SetBorders(false)
-	statusbar.SetBorderPadding(1, 1, 1, 1)
 	screen := &StackedTextViews{
-		app:       app,
-		rows:      rows,
-		statusbar: statusbar,
-		statuses:  make(map[string]*tview.TableCell, 0),
+		app:  app,
+		rows: rows,
 	}
+	screen.statusbar.init()
 
 	// event handlers
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
@@ -40,7 +36,7 @@ func NewStackedTextViews() *StackedTextViews {
 	// layout
 	grid := tview.NewGrid().
 		SetRows(3, 0).
-		AddItem(statusbar, 0, 0, 1, 1, 0, 0, true).
+		AddItem(screen.statusbar.table, 0, 0, 1, 1, 0, 0, true).
 		AddItem(rows, 1, 0, 1, 1, 0, 0, false)
 	app.SetRoot(grid, true)
 
@@ -61,16 +57,7 @@ func NewStackedTextViews() *StackedTextViews {
 }
 
 func (s *StackedTextViews) AddStatusItem(id, label string) *StackedTextViews {
-	t := s.statusbar
-	n := t.GetColumnCount()
-
-	c := tview.NewTableCell(label)
-	t.SetCell(0, n, c)
-
-	c = tview.NewTableCell("TODO").SetExpansion(2)
-	t.SetCell(0, n+1, c)
-	s.statuses[id] = c
-
+	s.statusbar.add(id, label)
 	return s
 }
 
