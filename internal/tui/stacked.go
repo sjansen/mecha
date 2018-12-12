@@ -22,7 +22,7 @@ func NewStackedTextViews() *StackedTextViews {
 		app:  app,
 		rows: rows,
 	}
-	screen.statusbar.init()
+	screen.statusbar.init(app)
 
 	// event handlers
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
@@ -56,8 +56,8 @@ func NewStackedTextViews() *StackedTextViews {
 	return screen
 }
 
-func (s *StackedTextViews) AddStatusItem(id, label string) *StackedTextViews {
-	s.statusbar.add(id, label)
+func (s *StackedTextViews) AddStatusItem(id, label string, updates <-chan *Status) *StackedTextViews {
+	s.statusbar.add(id, label, updates)
 	return s
 }
 
