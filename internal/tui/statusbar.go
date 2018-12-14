@@ -22,7 +22,6 @@ type Status struct {
 type statusbar struct {
 	app   *tview.Application
 	table *tview.Table
-	cells map[string]*tview.TableCell
 }
 
 func (s *statusbar) init(app *tview.Application) {
@@ -30,11 +29,9 @@ func (s *statusbar) init(app *tview.Application) {
 	s.table = tview.NewTable().
 		SetBorders(false)
 	s.table.SetBorderPadding(1, 1, 1, 1)
-
-	s.cells = make(map[string]*tview.TableCell, 0)
 }
 
-func (s *statusbar) add(id, label string, updates <-chan *Status) *statusbar {
+func (s *statusbar) add(label string, updates <-chan *Status) *statusbar {
 	t := s.table
 	n := t.GetColumnCount()
 
@@ -43,7 +40,6 @@ func (s *statusbar) add(id, label string, updates <-chan *Status) *statusbar {
 
 	c = tview.NewTableCell("TODO").SetExpansion(2)
 	t.SetCell(0, n+1, c)
-	s.cells[id] = c
 
 	go func() {
 		for status := range updates {

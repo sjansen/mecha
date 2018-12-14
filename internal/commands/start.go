@@ -17,28 +17,30 @@ func (cmd *startCmd) register(app *kingpin.Application) {
 }
 
 func (cmd *startCmd) run(pc *kingpin.ParseContext) error {
-	updates := make(chan *tui.Status)
 	screen := tui.NewStackedTextViews()
-	screen.AddStatusItem("todo", "TODO:", updates)
-	screen.AddStdView("TODO", nil, nil)
-	screen.AddStdView("TODO", nil, nil)
+	screen.AddStdView("TODO", nil, nil).
+		AddStdView("TODO", nil, nil)
 
-	go func() {
-		for {
-			if ok := rand.Intn(100) > 20; ok {
-				updates <- &tui.Status{
-					Severity: tui.Healthy,
-					Message:  "PASS",
+	for _, label := range []string{"Clock:", "Disk:", "RAM:"} {
+		updates := make(chan *tui.Status)
+		screen.AddStatusItem(label, updates)
+		go func() {
+			for {
+				if ok := rand.Intn(100) > 20; ok {
+					updates <- &tui.Status{
+						Severity: tui.Healthy,
+						Message:  "PASS",
+					}
+				} else {
+					updates <- &tui.Status{
+						Severity: tui.Alert,
+						Message:  "FAIL",
+					}
 				}
-			} else {
-				updates <- &tui.Status{
-					Severity: tui.Alert,
-					Message:  "FAIL",
-				}
+				time.Sleep(1 * time.Second)
 			}
-			time.Sleep(1 * time.Second)
-		}
-	}()
+		}()
+	}
 
 	return screen.Run()
 }

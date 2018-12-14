@@ -53,8 +53,8 @@ func NewStackedTextViews() *StackedTextViews {
 	return screen
 }
 
-func (s *StackedTextViews) AddStatusItem(id, label string, updates <-chan *Status) *StackedTextViews {
-	s.statusbar.add(id, label, updates)
+func (s *StackedTextViews) AddStatusItem(label string, updates <-chan *Status) *StackedTextViews {
+	s.statusbar.add(label, updates)
 	return s
 }
 
