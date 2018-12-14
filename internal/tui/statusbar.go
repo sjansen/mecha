@@ -20,26 +20,26 @@ type Status struct {
 }
 
 type statusbar struct {
-	app   *tview.Application
-	table *tview.Table
+	*tview.Table
+
+	app *tview.Application
 }
 
 func (s *statusbar) init(app *tview.Application) {
 	s.app = app
-	s.table = tview.NewTable().
+	s.Table = tview.NewTable().
 		SetBorders(false)
-	s.table.SetBorderPadding(1, 1, 1, 1)
+	s.SetBorderPadding(1, 1, 1, 1)
 }
 
 func (s *statusbar) add(label string, updates <-chan *Status) *statusbar {
-	t := s.table
-	n := t.GetColumnCount()
+	n := s.GetColumnCount()
 
 	c := tview.NewTableCell(label)
-	t.SetCell(0, n, c)
+	s.SetCell(0, n, c)
 
 	c = tview.NewTableCell("TODO").SetExpansion(2)
-	t.SetCell(0, n+1, c)
+	s.SetCell(0, n+1, c)
 
 	go func() {
 		for status := range updates {

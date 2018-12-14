@@ -46,7 +46,7 @@ func NewStackedTextViews() *StackedTextViews {
 	// layout
 	grid := tview.NewGrid().
 		SetRows(3, 0).
-		AddItem(screen.statusbar.table, 0, 0, 1, 1, 0, 0, true).
+		AddItem(screen.statusbar, 0, 0, 1, 1, 0, 0, true).
 		AddItem(rows, 1, 0, 1, 1, 0, 0, false)
 	app.SetRoot(grid, true)
 
@@ -74,7 +74,7 @@ func (s *StackedTextViews) Stop() {
 	s.app.Stop()
 }
 func (s *StackedTextViews) focusNext() {
-	if s.statusbar.table.HasFocus() {
+	if s.statusbar.HasFocus() {
 		if len(s.views) > 0 {
 			box := s.views[0]
 			box.SetBorderColor(tcell.ColorBlue)
@@ -90,7 +90,7 @@ func (s *StackedTextViews) focusNext() {
 				box.SetBorderColor(tcell.ColorBlue)
 				s.app.SetFocus(box)
 			} else {
-				s.app.SetFocus(s.statusbar.table)
+				s.app.SetFocus(s.statusbar)
 			}
 			return
 		}
@@ -98,7 +98,7 @@ func (s *StackedTextViews) focusNext() {
 }
 
 func (s *StackedTextViews) focusPrev() {
-	if s.statusbar.table.HasFocus() {
+	if s.statusbar.HasFocus() {
 		if len(s.views) > 0 {
 			box := s.views[len(s.views)-1]
 			box.SetBorderColor(tcell.ColorBlue)
@@ -110,7 +110,7 @@ func (s *StackedTextViews) focusPrev() {
 		if view.HasFocus() {
 			view.SetBorderColor(tcell.ColorDefault)
 			if i == 0 {
-				s.app.SetFocus(s.statusbar.table)
+				s.app.SetFocus(s.statusbar)
 			} else {
 				box := s.views[i-1]
 				box.SetBorderColor(tcell.ColorBlue)
