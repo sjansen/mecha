@@ -2,10 +2,10 @@ package commands
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
 	"time"
 
+	"github.com/beevik/ntp"
 	humanize "github.com/dustin/go-humanize"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
@@ -36,31 +36,45 @@ func (cmd *startCmd) run(pc *kingpin.ParseContext) error {
 	screen.AddStdView("TODO", nil, nil).
 		AddStdView("TODO", nil, nil)
 
-	for _, label := range []string{"Clock:"} {
-		updates := make(chan *tui.Status)
-		screen.AddStatusItem(label, updates)
-		go func() {
-			for {
-				if ok := rand.Intn(100) > 20; ok {
-					updates <- &tui.Status{
-						Severity: tui.Healthy,
-						Message:  "PASS",
-					}
-				} else {
-					updates <- &tui.Status{
-						Severity: tui.Alert,
-						Message:  "FAIL",
-					}
-				}
-				time.Sleep(1 * time.Second)
-			}
-		}()
-	}
-
+	screen.AddStatusItem("Clock:", startClockStatus())
 	screen.AddStatusItem("Disk:", startDiskStatus(root))
 	screen.AddStatusItem("RAM:", startMemoryStatus())
 
 	return screen.Run()
+}
+
+func startClockStatus() chan *tui.Status {
+	updates := make(chan *tui.Status)
+	go func() {
+		for {
+			updates <- &tui.Status{
+				Severity: tui.Refresh,
+				Message:  "Checking...",
+			}
+
+			update := &tui.Status{}
+			options := ntp.QueryOptions{Timeout: 30 * time.Second}
+			if x, err := ntp.QueryWithOptions("0.beevik-ntp.pool.ntp.org", options); err != nil {
+				update.Severity = tui.Unknown
+				update.Message = "???"
+			} else {
+				offset := x.ClockOffset.Round(time.Second)
+				if offset < time.Minute {
+					update.Severity = tui.Healthy
+					update.Message = fmt.Sprintf("PASS (%s)", offset)
+				} else if offset < 3*time.Minute {
+					update.Severity = tui.Warning
+					update.Message = fmt.Sprintf("WARNING (%s)", offset)
+				} else {
+					update.Severity = tui.Alert
+					update.Message = fmt.Sprintf("FAIL (%s)", offset)
+				}
+			}
+			updates <- update
+			time.Sleep(15 * time.Minute)
+		}
+	}()
+	return updates
 }
 
 func startDiskStatus(root string) chan *tui.Status {

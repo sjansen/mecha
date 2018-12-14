@@ -9,6 +9,7 @@ type Severity int
 
 const (
 	Unknown Severity = iota
+	Refresh
 	Healthy
 	Warning
 	Alert
@@ -38,7 +39,7 @@ func (s *statusbar) add(label string, updates <-chan *Status) *statusbar {
 	c := tview.NewTableCell(label)
 	s.SetCell(0, n, c)
 
-	c = tview.NewTableCell("TODO").SetExpansion(2)
+	c = tview.NewTableCell("").SetExpansion(2)
 	s.SetCell(0, n+1, c)
 
 	go func() {
@@ -55,6 +56,8 @@ func (s *statusbar) add(label string, updates <-chan *Status) *statusbar {
 func updateStatusCell(c *tview.TableCell, status *Status) {
 	msg := status.Message
 	switch status.Severity {
+	case Refresh:
+		c.SetText(msg).SetTextColor(tcell.ColorBlue)
 	case Healthy:
 		c.SetText(msg).SetTextColor(tcell.ColorGreen)
 	case Warning:
