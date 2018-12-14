@@ -53,8 +53,10 @@ func startClockStatus() chan *tui.Status {
 			}
 
 			update := &tui.Status{}
+			// https://www.ntppool.org/vendors.html
+			server := "0.beevik-ntp.pool.ntp.org"
 			options := ntp.QueryOptions{Timeout: 30 * time.Second}
-			if x, err := ntp.QueryWithOptions("0.beevik-ntp.pool.ntp.org", options); err != nil {
+			if x, err := ntp.QueryWithOptions(server, options); err != nil {
 				update.Severity = tui.Unknown
 				update.Message = "???"
 			} else {
@@ -71,7 +73,7 @@ func startClockStatus() chan *tui.Status {
 				}
 			}
 			updates <- update
-			time.Sleep(15 * time.Minute)
+			time.Sleep(time.Hour)
 		}
 	}()
 	return updates
@@ -86,14 +88,19 @@ func startDiskStatus(root string) chan *tui.Status {
 				update.Severity = tui.Unknown
 				update.Message = "???"
 			} else {
+				var status string
 				if x.UsedPercent < 85 {
 					update.Severity = tui.Healthy
+					status = "PASS"
 				} else if x.UsedPercent < 95 {
 					update.Severity = tui.Warning
+					status = "WARNING"
 				} else {
 					update.Severity = tui.Alert
+					status = "FAIL"
 				}
-				update.Message = fmt.Sprintf("%2.0f%% (%s/%s)",
+				update.Message = fmt.Sprintf("%s (%2.0f%% - %s/%s)",
+					status,
 					x.UsedPercent,
 					humanize.IBytes(x.Used),
 					humanize.IBytes(x.Total),
@@ -115,14 +122,19 @@ func startMemoryStatus() chan *tui.Status {
 				update.Severity = tui.Unknown
 				update.Message = "???"
 			} else {
+				var status string
 				if x.UsedPercent < 85 {
 					update.Severity = tui.Healthy
+					status = "PASS"
 				} else if x.UsedPercent < 95 {
 					update.Severity = tui.Warning
+					status = "WARNING"
 				} else {
 					update.Severity = tui.Alert
+					status = "FAIL"
 				}
-				update.Message = fmt.Sprintf("%2.0f%% (%s/%s)",
+				update.Message = fmt.Sprintf("%s (%2.0f%% - %s/%s)",
+					status,
 					x.UsedPercent,
 					humanize.IBytes(x.Used),
 					humanize.IBytes(x.Total),
