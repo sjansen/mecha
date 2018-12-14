@@ -20,6 +20,8 @@ func (cmd *startCmd) run(pc *kingpin.ParseContext) error {
 	updates := make(chan *tui.Status)
 	screen := tui.NewStackedTextViews()
 	screen.AddStatusItem("todo", "TODO:", updates)
+	screen.AddStdView("TODO", nil, nil)
+	screen.AddStdView("TODO", nil, nil)
 
 	go func() {
 		for {
