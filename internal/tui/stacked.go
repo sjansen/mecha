@@ -60,7 +60,7 @@ func (s *StackedTextViews) AddStatusItem(label string, updates <-chan *Status) *
 
 func (s *StackedTextViews) AddStdView(label string, stdout, stderr <-chan string) *StackedTextViews {
 	view := &stdview{}
-	view.init(s.app, label, nil, nil)
+	view.init(s.app, label, stdout, stderr)
 	s.rows.AddItem(view, 0, 1, false)
 	s.views = append(s.views, view)
 	return s

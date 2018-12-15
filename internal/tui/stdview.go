@@ -35,6 +35,7 @@ func (v *stdview) init(app *tview.Application, title string, stdout, stderr <-ch
 					fmt.Fprint(view, line)
 					fmt.Fprint(view, "[-:-:-]\n")
 				} else {
+					fmt.Fprint(view, "[blue::b]stdout closed[-:-:-]\n")
 					stdout = nil
 					if stderr == nil {
 						break loop
@@ -46,6 +47,7 @@ func (v *stdview) init(app *tview.Application, title string, stdout, stderr <-ch
 					fmt.Fprint(view, line)
 					fmt.Fprint(view, "[-:-:-]\n")
 				} else {
+					fmt.Fprint(view, "[blue::b]stderr closed[-:-:-]\n")
 					stderr = nil
 					if stdout == nil {
 						break loop

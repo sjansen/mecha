@@ -1,8 +1,10 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/beevik/ntp"
@@ -11,7 +13,9 @@ import (
 	"github.com/shirou/gopsutil/mem"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 
+	"github.com/sjansen/mecha/internal/config"
 	"github.com/sjansen/mecha/internal/fs"
+	"github.com/sjansen/mecha/internal/subprocess"
 	"github.com/sjansen/mecha/internal/tui"
 )
 
@@ -33,12 +37,17 @@ func (cmd *startCmd) run(pc *kingpin.ParseContext) error {
 	}
 
 	screen := tui.NewStackedTextViews()
-	screen.AddStdView("TODO", nil, nil).
-		AddStdView("TODO", nil, nil)
-
 	screen.AddStatusItem("Clock:", startClockStatus())
 	screen.AddStatusItem("Disk:", startDiskStatus(root))
 	screen.AddStatusItem("RAM:", startMemoryStatus())
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	err = startProcs(ctx, screen)
+	if err != nil {
+		return err
+	}
 
 	return screen.Run()
 }
@@ -145,4 +154,31 @@ func startMemoryStatus() chan *tui.Status {
 		}
 	}()
 	return updates
+}
+
+func startProcs(ctx context.Context, screen *tui.StackedTextViews) error {
+	procfile, err := os.Open("Procfile")
+	if err != nil {
+		return err
+	}
+	procs, err := config.ReadProcfile(procfile)
+	if err != nil {
+		return err
+	}
+
+	keys := make([]string, 0, len(procs))
+	for k := range procs {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		p, err := subprocess.Run(ctx, "sh", "-c", procs[k])
+		if err != nil {
+			return err
+		}
+		screen.AddStdView(" "+k+" ", p.Stdout, p.Stderr)
+	}
+
+	return nil
 }

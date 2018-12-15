@@ -40,16 +40,16 @@ func Run(ctx context.Context, name string, args ...string) (p *Subprocess, err e
 
 	go func() {
 		err := cmd.Wait()
+		b1.Close()
+		b2.Close()
 		if err == nil {
 			es <- &ExitStatus{Code: 0}
 		} else if _, ok := err.(*exec.ExitError); ok {
 			ws, _ := cmd.ProcessState.Sys().(syscall.WaitStatus)
-			es <- &ExitStatus{Code: ws.ExitStatus()}
+			es <- &ExitStatus{Code: ws.ExitStatus(), Error: err}
 		} else {
 			es <- &ExitStatus{Code: -1, Error: err}
 		}
-		b1.Close()
-		b2.Close()
 	}()
 
 	return
