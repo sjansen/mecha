@@ -19,11 +19,17 @@ import (
 	"github.com/sjansen/mecha/internal/tui"
 )
 
-type startCmd struct{}
+type startCmd struct {
+	procfile string
+}
 
 func (cmd *startCmd) register(app *kingpin.Application) {
-	app.Command("start", "Start the application defined by Procfile").
+	x := app.Command("start", "Start the application defined by Procfile").
 		Action(cmd.run)
+	x.Flag("procfile", `proc file (default "Procfile")`).
+		Short('f').
+		Default("Procfile").
+		ExistingFileVar(&cmd.procfile)
 }
 
 func (cmd *startCmd) run(pc *kingpin.ParseContext) error {
@@ -44,7 +50,7 @@ func (cmd *startCmd) run(pc *kingpin.ParseContext) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	err = startProcs(ctx, screen)
+	err = startProcs(ctx, screen, cmd.procfile)
 	if err != nil {
 		return err
 	}
@@ -156,8 +162,8 @@ func startMemoryStatus() chan *tui.Status {
 	return updates
 }
 
-func startProcs(ctx context.Context, screen *tui.StackedTextViews) error {
-	procfile, err := os.Open("Procfile")
+func startProcs(ctx context.Context, screen *tui.StackedTextViews, filename string) error {
+	procfile, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
