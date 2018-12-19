@@ -2,3 +2,4 @@ a: while true; do date; sleep 1; done
 b: while true; do date; sleep 2; done
 c: while true; do date; sleep 3; done
 d: for X in 5 4 3 2 1; do echo $X; sleep 1; done
+e: echo 'I feel happy!' >&2; sleep 3; exit 42

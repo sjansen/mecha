@@ -26,6 +26,7 @@ func Run(ctx context.Context, name string, args ...string) (p *Subprocess, err e
 	cmd := exec.CommandContext(ctx, name, args...)
 	cmd.Stdout = b1
 	cmd.Stderr = b2
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 
 	p = &Subprocess{
 		Stdout: b1.Subscribe(),
@@ -33,16 +34,18 @@ func Run(ctx context.Context, name string, args ...string) (p *Subprocess, err e
 	}
 
 	var es chan *ExitStatus
-	if err = cmd.Start(); err == nil {
-		es = make(chan *ExitStatus)
-		p.PID = cmd.Process.Pid
-		p.Status = es
+	if err = cmd.Start(); err != nil {
+		return nil, err
 	}
 
+	es = make(chan *ExitStatus)
+	p.PID = cmd.Process.Pid
+	p.Status = es
 	go func() {
 		err := cmd.Wait()
 		b1.Close()
 		b2.Close()
+		// TODO use ProcessState.ExitCode after Go 1.12
 		if err == nil {
 			es <- &ExitStatus{Code: 0}
 		} else if _, ok := err.(*exec.ExitError); ok {

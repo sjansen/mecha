@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"syscall"
 	"time"
 
 	"github.com/beevik/ntp"
@@ -183,22 +184,25 @@ func startProcs(ctx context.Context, screen *tui.StackedTextViews, filename stri
 		if err != nil {
 			return err
 		}
+
 		updates := make(chan *tui.Status)
 		screen.AddStdView(" "+k+" ", p.Stdout, p.Stderr, updates)
 		go func() {
 			msg := fmt.Sprintf("PID: %d", p.PID)
 			updates <- &tui.Status{Message: msg}
+
 			select {
 			case <-ctx.Done():
 				// noop
 			case status := <-p.Status:
-				msg = fmt.Sprintf("exit=%d", status.Code)
-				if status.Error != nil {
-					msg += " reason=" + status.Error.Error()
+				if status.Code == -1 {
+					msg = fmt.Sprintf("exited; reason=%q", status.Error)
+				} else {
+					msg = fmt.Sprintf("exit=%d", status.Code)
 				}
 				updates <- &tui.Status{Message: msg}
 			}
-			return
+			syscall.Kill(-p.PID, syscall.SIGHUP)
 		}()
 	}
 
