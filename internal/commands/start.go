@@ -183,7 +183,23 @@ func startProcs(ctx context.Context, screen *tui.StackedTextViews, filename stri
 		if err != nil {
 			return err
 		}
-		screen.AddStdView(" "+k+" ", p.Stdout, p.Stderr)
+		updates := make(chan *tui.Status)
+		screen.AddStdView(" "+k+" ", p.Stdout, p.Stderr, updates)
+		go func() {
+			msg := fmt.Sprintf("PID: %d", p.PID)
+			updates <- &tui.Status{Message: msg}
+			select {
+			case <-ctx.Done():
+				// noop
+			case status := <-p.Status:
+				msg = fmt.Sprintf("exit=%d", status.Code)
+				if status.Error != nil {
+					msg += " reason=" + status.Error.Error()
+				}
+				updates <- &tui.Status{Message: msg}
+			}
+			return
+		}()
 	}
 
 	return nil

@@ -35,6 +35,7 @@ func Run(ctx context.Context, name string, args ...string) (p *Subprocess, err e
 	var es chan *ExitStatus
 	if err = cmd.Start(); err == nil {
 		es = make(chan *ExitStatus)
+		p.PID = cmd.Process.Pid
 		p.Status = es
 	}
 
