@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/chzyer/readline"
-	"github.com/google/skylark"
-	"github.com/google/skylark/resolve"
-	"github.com/google/skylark/syntax"
+	"go.starlark.net/resolve"
+	"go.starlark.net/starlark"
+	"go.starlark.net/syntax"
 )
 
 const ps1 = "> "
@@ -35,8 +35,8 @@ func main() {
 	}
 	defer l.Close()
 
-	predeclared := skylark.StringDict{}
-	thread := &skylark.Thread{}
+	predeclared := starlark.StringDict{}
+	thread := &starlark.Thread{}
 
 	var lines []string
 	for {
@@ -69,7 +69,7 @@ func main() {
 
 		_, err = syntax.ParseExpr("<stdin>", line, 0)
 		if err != nil {
-			if globals, err := skylark.ExecFile(thread, "<stdin>", buffer, predeclared); err != nil {
+			if globals, err := starlark.ExecFile(thread, "<stdin>", buffer, predeclared); err != nil {
 				fmt.Println(err)
 			} else {
 				for k, v := range globals {
@@ -77,7 +77,7 @@ func main() {
 				}
 			}
 		} else {
-			if v, err := skylark.Eval(thread, "<stdin>", buffer, predeclared); err != nil {
+			if v, err := starlark.Eval(thread, "<stdin>", buffer, predeclared); err != nil {
 				fmt.Println(err.Error())
 			} else {
 				fmt.Println(v.String())

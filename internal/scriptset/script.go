@@ -3,7 +3,7 @@ package scriptset
 import (
 	"fmt"
 
-	"github.com/google/skylark"
+	"go.starlark.net/starlark"
 )
 
 type script struct {
@@ -12,18 +12,18 @@ type script struct {
 }
 
 func (s *script) init(
-	steps skylark.Value,
+	steps starlark.Value,
 ) error {
 	switch x := steps.(type) {
 	case *cmd:
 		s.Concurrent = false
 		s.Steps = []*cmd{x}
-	case *skylark.List:
+	case *starlark.List:
 		s.Concurrent = false
 		if err := s.initSteps(x.Len(), x); err != nil {
 			return err
 		}
-	case *skylark.Set:
+	case *starlark.Set:
 		s.Concurrent = true
 		if err := s.initSteps(x.Len(), x); err != nil {
 			return err
@@ -37,13 +37,13 @@ func (s *script) init(
 	return nil
 }
 
-func (s *script) initSteps(n int, x skylark.Iterable) error {
+func (s *script) initSteps(n int, x starlark.Iterable) error {
 	s.Steps = make([]*cmd, 0, n)
 
 	iter := x.Iterate()
 	defer iter.Done()
 
-	var item skylark.Value
+	var item starlark.Value
 	for iter.Next(&item) {
 		if cmd, ok := item.(*cmd); ok {
 			s.Steps = append(s.Steps, cmd)

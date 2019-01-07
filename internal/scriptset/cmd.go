@@ -4,22 +4,22 @@ import (
 	"fmt"
 	"hash/fnv"
 
-	"github.com/google/skylark"
+	"go.starlark.net/starlark"
 )
 
 type cmd struct {
 	Args []string `json:"args"`
 }
 
-func (c *cmd) init(args skylark.Tuple) error {
+func (c *cmd) init(args starlark.Tuple) error {
 	tmp := make([]string, 0, len(args))
 	for _, val := range args {
 		switch x := val.(type) {
-		case skylark.Float:
+		case starlark.Float:
 			tmp = append(tmp, x.String())
-		case skylark.Int:
+		case starlark.Int:
 			tmp = append(tmp, x.String())
-		case skylark.String:
+		case starlark.String:
 			tmp = append(tmp, x.GoString())
 		default:
 			return fmt.Errorf(
@@ -48,11 +48,11 @@ func (c *cmd) String() string {
 	return "cmd"
 }
 
-func (c *cmd) Truth() skylark.Bool {
+func (c *cmd) Truth() starlark.Bool {
 	if len(c.Args) > 0 {
-		return skylark.True
+		return starlark.True
 	}
-	return skylark.False
+	return starlark.False
 }
 
 func (c *cmd) Type() string {

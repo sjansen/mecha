@@ -74,7 +74,7 @@ func startClockStatus() chan *tui.Status {
 			options := ntp.QueryOptions{Timeout: 30 * time.Second}
 			if x, err := ntp.QueryWithOptions(server, options); err != nil {
 				update.Severity = tui.Unknown
-				update.Message = "???"
+				update.Message = err.Error()
 			} else {
 				offset := x.ClockOffset.Round(time.Second)
 				if offset < time.Minute {

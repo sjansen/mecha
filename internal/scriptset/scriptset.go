@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/google/skylark"
-	"github.com/google/skylark/resolve"
+	"go.starlark.net/resolve"
+	"go.starlark.net/starlark"
 )
 
 func init() {
@@ -14,37 +14,37 @@ func init() {
 }
 
 type ScriptSet struct {
-	globals skylark.StringDict
-	thread  *skylark.Thread
+	globals starlark.StringDict
+	thread  *starlark.Thread
 
 	Scripts map[string]*script `json:"scripts"`
 }
 
 func New() *ScriptSet {
 	s := &ScriptSet{
-		thread:  &skylark.Thread{},
+		thread:  &starlark.Thread{},
 		Scripts: make(map[string]*script),
 	}
-	s.globals = skylark.StringDict{
-		"cmd":    skylark.NewBuiltin("cmd", s.cmd),
-		"script": skylark.NewBuiltin("script", s.script),
+	s.globals = starlark.StringDict{
+		"cmd":    starlark.NewBuiltin("cmd", s.cmd),
+		"script": starlark.NewBuiltin("script", s.script),
 	}
 	return s
 }
 
 func (set *ScriptSet) Add(filename string, r io.Reader) error {
-	if _, err := skylark.ExecFile(set.thread, filename, r, set.globals); err != nil {
+	if _, err := starlark.ExecFile(set.thread, filename, r, set.globals); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (set *ScriptSet) cmd(
-	thread *skylark.Thread,
-	fn *skylark.Builtin,
-	args skylark.Tuple,
-	kwargs []skylark.Tuple,
-) (skylark.Value, error) {
+	thread *starlark.Thread,
+	fn *starlark.Builtin,
+	args starlark.Tuple,
+	kwargs []starlark.Tuple,
+) (starlark.Value, error) {
 	if len(kwargs) > 0 {
 		err := fmt.Errorf("%s: unexpected keyword arguments", fn.Name())
 		return nil, err
@@ -58,15 +58,21 @@ func (set *ScriptSet) cmd(
 	return cmd, nil
 }
 
+// script(
+//   name,
+//   steps,
+//   check=None,
+//   recover=None,
+// )
 func (set *ScriptSet) script(
-	thread *skylark.Thread,
-	fn *skylark.Builtin,
-	args skylark.Tuple,
-	kwargs []skylark.Tuple,
-) (skylark.Value, error) {
-	var name skylark.String
-	var steps skylark.Value
-	err := skylark.UnpackArgs(
+	thread *starlark.Thread,
+	fn *starlark.Builtin,
+	args starlark.Tuple,
+	kwargs []starlark.Tuple,
+) (starlark.Value, error) {
+	var name starlark.String
+	var steps starlark.Value
+	err := starlark.UnpackArgs(
 		fn.Name(), args, kwargs,
 		"name", &name,
 		"steps", &steps,
@@ -81,5 +87,5 @@ func (set *ScriptSet) script(
 	}
 
 	set.Scripts[name.GoString()] = script
-	return skylark.None, nil
+	return starlark.None, nil
 }
