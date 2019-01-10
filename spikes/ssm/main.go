@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -23,15 +25,22 @@ func main() {
 	}
 
 	svc := ssm.New(session.Must(session.NewSession()))
-	result, err := svc.GetParameters(&ssm.GetParametersInput{
-		Names: []*string{
-			aws.String("/foo"), aws.String("/foo/bar"), aws.String("/foo/baz"),
-		},
+
+	deadline := time.Now().Add(1 * time.Minute)
+	ctx, cancel := context.WithDeadline(context.Background(), deadline)
+	defer cancel()
+
+	err := svc.GetParametersByPathPagesWithContext(ctx, &ssm.GetParametersByPathInput{
+		MaxResults:     aws.Int64(1),
+		Path:           aws.String("/foo"),
+		Recursive:      aws.Bool(true),
 		WithDecryption: aws.Bool(true),
+	}, func(page *ssm.GetParametersByPathOutput, done bool) bool {
+		fmt.Println(page.Parameters)
+		fmt.Println("---")
+		return true
 	})
 	if err != nil {
 		fmt.Println(err.Error())
-	} else {
-		fmt.Println(result)
 	}
 }
