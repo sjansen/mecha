@@ -7,8 +7,8 @@ require (
 	github.com/StackExchange/wmi v0.0.0-20181212234831-e0a55b97c705 // indirect
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
-	github.com/aws/aws-sdk-go v1.16.16
-	github.com/aws/aws-sdk-go-v2 v2.0.0-preview.4+incompatible
+	github.com/aws/aws-sdk-go v1.16.17
+	github.com/aws/aws-sdk-go-v2 v0.7.0
 	github.com/beevik/ntp v0.2.0
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
@@ -21,14 +21,11 @@ require (
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/fatih/color v1.7.0
 	github.com/gdamore/tcell v1.1.1
-	github.com/go-ini/ini v1.41.0 // indirect
 	github.com/go-ole/go-ole v1.2.2 // indirect
 	github.com/gogo/protobuf v1.2.0 // indirect
 	github.com/golang/protobuf v1.2.0
-	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v1.6.2 // indirect
-	github.com/jtolds/gls v4.2.1+incompatible // indirect
 	github.com/knq/ini v0.0.0-20181118015158-a301e724bd35
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
@@ -42,22 +39,19 @@ require (
 	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
 	github.com/sirupsen/logrus v1.3.0 // indirect
 	github.com/sjansen/watchman v0.1.0
-	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
-	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
 	github.com/stretchr/testify v1.3.0
-	go.starlark.net v0.0.0-20190106165729-93b8d146431e
+	go.starlark.net v0.0.0-20190109175711-d21d424e7da2
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1
 	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc
-	golang.org/x/net v0.0.0-20181220203305-927f97764cc3
+	golang.org/x/net v0.0.0-20190110200230-915654e7eabc
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4 // indirect
-	golang.org/x/sys v0.0.0-20190107070147-cb59ee366067 // indirect
+	golang.org/x/sys v0.0.0-20190109145017-48ac38b7c8cb // indirect
 	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c // indirect
-	google.golang.org/genproto v0.0.0-20181221175505-bd9b4fb69e2f // indirect
+	google.golang.org/genproto v0.0.0-20190110221437-6909d8a4a91b // indirect
 	google.golang.org/grpc v1.17.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
-	gopkg.in/ini.v1 v1.41.0 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.0 // indirect
 	gopkg.in/src-d/go-git-fixtures.v3 v3.3.0 // indirect
 	gopkg.in/src-d/go-git.v4 v4.8.1
