@@ -14,7 +14,7 @@ require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/docker/distribution v2.7.0+incompatible // indirect
-	github.com/docker/docker v0.7.3-0.20180827131323-0c5f8d2b9b23
+	github.com/docker/docker v0.0.0-20190109173153-a79fabbfe841
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.3.3 // indirect
 	github.com/dustin/go-humanize v1.0.0
@@ -57,3 +57,5 @@ require (
 	gopkg.in/src-d/go-git.v4 v4.8.1
 	gotest.tools v2.2.0+incompatible // indirect
 )
+
+replace github.com/docker/docker => github.com/docker/engine v0.0.0-20190109173153-a79fabbfe841
