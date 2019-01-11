@@ -19,10 +19,10 @@ linters:
     - maligned
     - misspell
     - structcheck
+    - typecheck
     - varcheck
     disable:
     - errcheck  # configurable ignore
-    - typecheck # go1.11 compatibility
     - megacheck # go1.11 compatibility
     fast: false
 

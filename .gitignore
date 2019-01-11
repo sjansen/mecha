@@ -9,6 +9,7 @@ venv/
 /mecha
 /TODO
 .DS_Store
+c.out
 
 # Patterns
 *.py[co]

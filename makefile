@@ -1,3 +1,5 @@
+.PHONY:  default  refresh  test  test-coverage  test-docker
+
 default: test
 
 clean:
@@ -6,6 +8,10 @@ clean:
 	  rm `basename $$PWD` 2>/dev/null || true; \
 	  popd >/dev/null; \
 	done
+
+refresh:
+	cookiecutter gh:sjansen/cookiecutter-golang --output-dir .. --config-file .cookiecutter.yaml --no-input --overwrite-if-exists
+	git checkout go.mod go.sum
 
 spikes:
 	@for I in spikes/*/main.go; do \
@@ -28,11 +34,9 @@ test:
 
 test-coverage:
 	mkdir -p dist
-	go test -coverprofile=dist/coverage.out ./internal/...
+	go test -coverprofile=dist/coverage.out ./...
 	go tool cover -html=dist/coverage.out
 
 test-docker:
 	docker-compose --version
 	docker-compose up --abort-on-container-exit --exit-code-from=go --force-recreate
-
-.PHONY: clean default spikes test test-docker

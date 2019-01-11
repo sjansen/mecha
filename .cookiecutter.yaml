@@ -1,0 +1,3 @@
+default_context:
+    github_org_or_user: "sjansen"
+    project: "mecha"
