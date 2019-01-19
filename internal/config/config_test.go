@@ -17,11 +17,9 @@ func (f *mockFile) GetKey(name string) string {
 }
 func (f *mockFile) RemoveKey(name string) {
 	f.Called(name)
-	return
 }
 func (f *mockFile) SetKey(name, value string) {
 	f.Called(name, value)
-	return
 }
 func (f *mockFile) Save() error {
 	args := f.Called()

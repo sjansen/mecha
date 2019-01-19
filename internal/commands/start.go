@@ -77,13 +77,14 @@ func startClockStatus() chan *tui.Status {
 				update.Message = err.Error()
 			} else {
 				offset := x.ClockOffset.Round(time.Second)
-				if offset < time.Minute {
+				switch {
+				case offset < time.Minute:
 					update.Severity = tui.Healthy
 					update.Message = fmt.Sprintf("PASS (%s)", offset)
-				} else if offset < 3*time.Minute {
+				case offset < 3*time.Minute:
 					update.Severity = tui.Warning
 					update.Message = fmt.Sprintf("WARNING (%s)", offset)
-				} else {
+				default:
 					update.Severity = tui.Alert
 					update.Message = fmt.Sprintf("FAIL (%s)", offset)
 				}
@@ -105,13 +106,14 @@ func startDiskStatus(root string) chan *tui.Status {
 				update.Message = "???"
 			} else {
 				var status string
-				if x.UsedPercent < 85 {
+				switch {
+				case x.UsedPercent < 85:
 					update.Severity = tui.Healthy
 					status = "PASS"
-				} else if x.UsedPercent < 95 {
+				case x.UsedPercent < 95:
 					update.Severity = tui.Warning
 					status = "WARNING"
-				} else {
+				default:
 					update.Severity = tui.Alert
 					status = "FAIL"
 				}
@@ -139,13 +141,14 @@ func startMemoryStatus() chan *tui.Status {
 				update.Message = "???"
 			} else {
 				var status string
-				if x.UsedPercent < 85 {
+				switch {
+				case x.UsedPercent < 85:
 					update.Severity = tui.Healthy
 					status = "PASS"
-				} else if x.UsedPercent < 95 {
+				case x.UsedPercent < 95:
 					update.Severity = tui.Warning
 					status = "WARNING"
-				} else {
+				default:
 					update.Severity = tui.Alert
 					status = "FAIL"
 				}

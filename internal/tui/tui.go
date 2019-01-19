@@ -35,11 +35,11 @@ func NewDemoScreen() *DemoScreen {
 	screen := &DemoScreen{
 		app:       app,
 		menu:      menu,
-		menuItems: make(map[string]MenuAction, 0),
+		menuItems: make(map[string]MenuAction),
 		rows:      rows,
 		views:     make([]*tview.TextView, 0),
 		statusbar: statusbar,
-		statuses:  make(map[string]*tview.TableCell, 0),
+		statuses:  make(map[string]*tview.TableCell),
 	}
 
 	// layout
@@ -54,15 +54,16 @@ func NewDemoScreen() *DemoScreen {
 	// event handlers
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
 		key := e.Key()
-		if key == tcell.KeyTab {
+		switch {
+		case key == tcell.KeyTab:
 			screen.focusNext()
 			screen.app.Draw()
 			return nil
-		} else if key == tcell.KeyBacktab {
+		case key == tcell.KeyBacktab:
 			screen.focusPrev()
 			screen.app.Draw()
 			return nil
-		} else if key == tcell.KeyRune && e.Rune() == 'q' {
+		case key == tcell.KeyRune && e.Rune() == 'q':
 			app.Stop()
 		}
 		return e

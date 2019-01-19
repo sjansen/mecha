@@ -41,15 +41,16 @@ func main() {
 	var lines []string
 	for {
 		line, err := l.Readline()
-		if err == readline.ErrInterrupt {
+		switch {
+		case err == readline.ErrInterrupt:
 			if len(line) == 0 {
 				break
 			} else {
 				continue
 			}
-		} else if err == io.EOF {
+		case err == io.EOF:
 			break
-		} else if line == "exit" {
+		case line == "exit":
 			break
 		}
 

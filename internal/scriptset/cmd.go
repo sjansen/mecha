@@ -32,7 +32,6 @@ func (c *cmd) init(args starlark.Tuple) error {
 }
 
 func (c *cmd) Freeze() {
-	return
 }
 
 func (c *cmd) Hash() (uint32, error) {

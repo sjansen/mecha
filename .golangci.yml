@@ -8,6 +8,7 @@ run:
 linters:
     enable:
     - deadcode
+    - gocritic
     - gocyclo
     - gofmt
     - goimports
@@ -17,13 +18,13 @@ linters:
     - ineffassign
     - lll
     - maligned
+    - megacheck
     - misspell
     - structcheck
     - typecheck
     - varcheck
     disable:
     - errcheck  # configurable ignore
-    - megacheck # go1.11 compatibility
     fast: false
 
 linters-settings:

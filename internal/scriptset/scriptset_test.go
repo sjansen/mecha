@@ -28,7 +28,9 @@ func TestScriptParsing(t *testing.T) {
 			require := require.New(t)
 
 			f, err := os.Open(path)
-			defer f.Close()
+			defer func() {
+				_ = f.Close()
+			}()
 			require.NoError(err)
 
 			scriptset := New()

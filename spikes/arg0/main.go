@@ -15,11 +15,12 @@ var arg0 struct {
 
 func init() {
 	arg0 := os.Args[0]
-	if filepath.IsAbs(arg0) {
+	switch {
+	case filepath.IsAbs(arg0):
 		setARG0(arg0, nil)
-	} else if strings.ContainsRune(arg0, os.PathSeparator) {
+	case strings.ContainsRune(arg0, os.PathSeparator):
 		setARG0(filepath.Abs(arg0))
-	} else {
+	default:
 		setARG0(exec.LookPath(arg0))
 	}
 }

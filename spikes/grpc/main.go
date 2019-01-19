@@ -106,11 +106,12 @@ func startChildren() {
 }
 
 func main() {
-	if len(os.Args) < 2 {
+	switch {
+	case len(os.Args) < 2:
 		startChildren()
-	} else if os.Args[1] == "--as-server" {
+	case os.Args[1] == "--as-server":
 		startServer()
-	} else {
+	default:
 		for _, msg := range []string{
 			"sbb", "one", "onm", "dhk", "dhhk", "pbetr", "tenhyg", "tnecyl", "jnyqb", "serq",
 		} {

@@ -57,7 +57,6 @@ func startReader(wg *sync.WaitGroup, c *color.Color, ch <-chan string) {
 			fmt.Print(line, "\n")
 		}
 	}()
-	return
 }
 
 func startChildren() {

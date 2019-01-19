@@ -15,7 +15,7 @@ func main() {
 		die(err)
 	}
 
-	for s := "0123456789"; len(s) <= 2000000; s = s + s {
+	for s := "0123456789"; len(s) <= 2000000; s += s {
 		info, err := proc.MemoryInfo()
 		if err != nil {
 			die(err)
