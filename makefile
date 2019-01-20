@@ -34,7 +34,7 @@ test:
 
 test-coverage:
 	mkdir -p dist
-	go test -coverpkg ./... -coverprofile=dist/coverage.out -tags integration ./...
+	go test -coverpkg .,./internal/... -coverprofile=dist/coverage.out -tags integration . ./...
 	go tool cover -html=dist/coverage.out
 
 test-docker:
