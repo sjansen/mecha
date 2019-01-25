@@ -9,7 +9,7 @@ venv/
 /mecha
 /TODO
 .DS_Store
-c.out
+coverage.txt
 
 # Patterns
 *.py[co]

@@ -12,3 +12,7 @@ script: docker-compose up --abort-on-container-exit --exit-code-from=go --force-
 
 after_script:
  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+after_success:
+ - mv dist/coverage.txt coverage.txt
+ - bash <(curl -s https://codecov.io/bash)
