@@ -24,6 +24,7 @@ require (
 	github.com/go-ole/go-ole v1.2.2 // indirect
 	github.com/gogo/protobuf v1.2.0 // indirect
 	github.com/golang/protobuf v1.2.0
+	github.com/google/go-jsonnet v0.12.1
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v1.6.2 // indirect
 	github.com/knq/ini v0.0.0-20181118015158-a301e724bd35
