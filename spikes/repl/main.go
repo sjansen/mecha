@@ -39,19 +39,20 @@ func main() {
 	thread := &starlark.Thread{}
 
 	var lines []string
+LOOP:
 	for {
 		line, err := l.Readline()
 		switch {
 		case err == readline.ErrInterrupt:
 			if len(line) == 0 {
-				break
+				break LOOP
 			} else {
 				continue
 			}
 		case err == io.EOF:
-			break
+			break LOOP
 		case line == "exit":
-			break
+			break LOOP
 		}
 
 		lines = append(lines, line)
