@@ -15,14 +15,14 @@ require (
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/davecgh/go-spew v1.1.1
 	github.com/docker/distribution v2.7.0+incompatible // indirect
-	github.com/docker/docker v0.0.0-20190109173153-a79fabbfe841
+	github.com/docker/docker v0.0.0-20190227143341-cbe11bdc6d
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.3.3 // indirect
 	github.com/dustin/go-humanize v1.0.0
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/fatih/color v1.7.0
 	github.com/gdamore/tcell v1.1.1
-	github.com/go-ole/go-ole v1.2.2 // indirect
+	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/gogo/protobuf v1.2.0 // indirect
 	github.com/golang/protobuf v1.2.0
 	github.com/google/go-jsonnet v0.12.1
@@ -61,4 +61,4 @@ require (
 	gotest.tools v2.2.0+incompatible // indirect
 )
 
-replace github.com/docker/docker => github.com/docker/engine v0.0.0-20190109173153-a79fabbfe841
+replace github.com/docker/docker => github.com/docker/engine v0.0.0-20190227143341-cbe11bdc6d

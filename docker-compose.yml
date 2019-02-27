@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   go:
     build:
@@ -8,4 +8,5 @@ services:
       GO111MODULE: "on"
     volumes:
      - .:/go/src/github.com/sjansen/mecha
+     - "${GOPATH:-/tmp}/pkg/mod:/go/pkg/mod"
     working_dir: /go/src/github.com/sjansen/mecha
