@@ -13,6 +13,7 @@ require (
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
+	github.com/davecgh/go-spew v1.1.1
 	github.com/docker/distribution v2.7.0+incompatible // indirect
 	github.com/docker/docker v0.0.0-20190109173153-a79fabbfe841
 	github.com/docker/go-connections v0.4.0 // indirect
@@ -27,6 +28,7 @@ require (
 	github.com/google/go-jsonnet v0.12.1
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v1.6.2 // indirect
+	github.com/hashicorp/hcl v1.0.0
 	github.com/knq/ini v0.0.0-20181118015158-a301e724bd35
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
