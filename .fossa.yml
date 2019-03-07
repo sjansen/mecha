@@ -1,0 +1,13 @@
+version: 1
+cli:
+  server: https://app.fossa.io
+  fetcher: custom
+  project: mecha
+analyze:
+  modules:
+  - name: github.com/sjansen/mecha
+    type: go
+    target: github.com/sjansen/mecha
+    path: .
+    options:
+      all-tags: true
