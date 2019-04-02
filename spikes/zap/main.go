@@ -49,9 +49,10 @@ func main() {
 		"metavar", "bar",
 		"question", "6 * 9")
 	logger.With(
-		"metavar", "baz",
-		"answer", 42).
-		Infow("some info")
+		"metavar", "baz").
+		Infow(
+			"some info",
+			"answer", 42)
 	logger.With(
 		"hint", "The secret is to bang the rocks together, guys.").
 		Debugf("debug=%d", *verbose)
