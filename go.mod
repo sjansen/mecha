@@ -43,6 +43,7 @@ require (
 	github.com/sirupsen/logrus v1.3.0 // indirect
 	github.com/sjansen/watchman v0.1.0
 	github.com/stretchr/testify v1.3.0
+	github.com/tklauser/go-sysconf v0.0.0-20200125124152-4f5f1f2b970a
 	go.starlark.net v0.0.0-20190109175711-d21d424e7da2
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
