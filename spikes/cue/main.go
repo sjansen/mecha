@@ -7,6 +7,8 @@ import (
 	"cuelang.org/go/cue"
 )
 
+// https://cuelang.org/
+
 func main() {
 	const config = `
 	msg:   "Hello \(place)!"
