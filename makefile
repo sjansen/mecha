@@ -1,4 +1,4 @@
-.PHONY:  default  refresh  spikes  test  test-coverage  test-docker
+.PHONY:  clean default  refresh  spikes  test  test-coverage  test-docker
 
 default: test
 
@@ -14,17 +14,7 @@ refresh:
 	git checkout go.mod go.sum
 
 spikes:
-	@for I in spikes/*/main.go; do \
-	  echo ; \
-	  echo $$I; \
-	  pushd `dirname "$$I"` >/dev/null; \
-	  echo `basename $$PWD` > .gitignore; \
-	  echo ----------; \
-	  echo '1+2' | go run *.go; \
-	  echo ==========; \
-	  popd >/dev/null; \
-	  echo ; \
-	done
+	scripts/run-all-spikes
 
 test:
 	@scripts/run-all-tests

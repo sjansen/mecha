@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -x spikes/pytest/testdata/pytest ]; then
+    python3 -m venv spikes/pytest/testdata/venv/
+    spikes/pytest/testdata/venv/bin/pip install pytest
+fi
+
+for I in spikes/*/main.go; do
+    echo
+    echo $I
+    pushd `dirname "$I"` > /dev/null
+    echo `basename "$PWD"` > .gitignore
+    echo ----------
+    if [ -x test-harness ]; then
+        ./test-harness
+    else
+        go run *.go
+    fi
+    echo ==========
+    popd > /dev/null
+    echo
+done

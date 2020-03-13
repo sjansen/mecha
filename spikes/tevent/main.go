@@ -14,9 +14,6 @@ func main() {
 	view.SetBorder(true).
 		SetBorderColor(tcell.ColorBlue).
 		SetBorderPadding(0, 0, 1, 1)
-	view.SetChangedFunc(func() {
-		app.Draw()
-	})
 	fmt.Fprint(view, "[::r] Press Any Key ('q' to quit) [-:-:-]\n")
 
 	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {

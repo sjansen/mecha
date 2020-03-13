@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+go build
+
+export PYTHONDONTWRITEBYTECODE=1
+./$(basename $PWD) || true
