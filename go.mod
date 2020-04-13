@@ -9,7 +9,7 @@ require (
 	github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d // indirect
 	github.com/aws/aws-sdk-go v1.16.17
 	github.com/aws/aws-sdk-go-v2 v0.7.0
-	github.com/beevik/ntp v0.2.0
+	github.com/beevik/ntp v0.3.0
 	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
@@ -34,12 +34,13 @@ require (
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
+	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
 	github.com/opencontainers/image-spec v1.0.1 // indirect
 	github.com/pkg/sftp v1.8.3
-	github.com/rivo/tview v0.0.0-20200219210816-cd38d7432498
-	github.com/shirou/gopsutil v2.20.2+incompatible
+	github.com/rivo/tview v0.0.0-20200404204604-ca37f83cb2e7
+	github.com/shirou/gopsutil v2.20.3+incompatible
 	github.com/sirupsen/logrus v1.3.0 // indirect
 	github.com/sjansen/watchman v0.1.0
 	github.com/stretchr/testify v1.4.0
@@ -49,8 +50,8 @@ require (
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1
 	golang.org/x/crypto v0.0.0-20191010185427-af544f31c8ac
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
+	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
+	golang.org/x/sys v0.0.0-20200413165638-669c56c373c4 // indirect
 	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 	google.golang.org/grpc v1.19.0
