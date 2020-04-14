@@ -1,4 +1,4 @@
-.PHONY:  clean default  refresh  spikes  test  test-coverage  test-docker
+.PHONY:  clean  default  linux  macos  refresh  spikes  test  test-coverage  test-docker
 
 default: test
 
@@ -8,6 +8,12 @@ clean:
 	  rm `basename $$PWD` 2>/dev/null || true; \
 	  popd >/dev/null; \
 	done
+
+linux:
+	GOOS=linux GOARCH=amd64 go build -o mecha
+
+macos:
+	GOOS=darwin GOARCH=amd64 go build -o mecha
 
 refresh:
 	cookiecutter gh:sjansen/cookiecutter-golang --output-dir .. --config-file .cookiecutter.yaml --no-input --overwrite-if-exists
