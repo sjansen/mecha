@@ -48,12 +48,10 @@ func makeSomeNoise() {
 }
 
 func spawn(ctx context.Context, i int) int {
-	p, err := subprocess.Run(
-		ctx,
-		os.Args[0],
-		"--as-test-child",
-		strconv.Itoa(i),
-	)
+	p, err := subprocess.New(ctx, os.Args[0], "--as-test-child", strconv.Itoa(i)).
+		CaptureStdoutLines().
+		CaptureStderrLines().
+		Start()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return -1

@@ -41,7 +41,10 @@ func main() {
 		context.Background(),
 		60*time.Second,
 	)
-	p, err := subprocess.Run(ctx, pytest, "-v")
+	p, err := subprocess.New(ctx, pytest, "-v").
+		CaptureStdoutLines().
+		CaptureStderrLines().
+		Start()
 	if err != nil {
 		die(err)
 	}

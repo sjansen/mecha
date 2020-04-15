@@ -52,11 +52,10 @@ func startChildren() {
 
 	addStreamPair := func() {
 		// TODO report status
-		p, err := subprocess.Run(
-			ctx,
-			os.Args[0],
-			"--as-test-child",
-		)
+		p, err := subprocess.New(ctx, os.Args[0], "--as-test-child").
+			CaptureStdoutLines().
+			CaptureStderrLines().
+			Start()
 		if err != nil {
 			die(err)
 		}

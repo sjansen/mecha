@@ -14,13 +14,16 @@ var testcase = regexp.MustCompile(
 	`^(?P<file>.+?)::` +
 		`(?P<test>.+)[\s]+` +
 		`(?P<result>(?:PASS|FAIL)[^\s]+)` +
-		`[\s]*(?P<progress>....%.)?\n?$`,
+		`[\s]*(?P<progress>....%.)?$`,
 )
 
 func Run(ctx context.Context, args ...string) error {
-	// PYTHONUNBUFFERED=1
 	args = append([]string{"-v"}, args...)
-	p, err := subprocess.Run(ctx, "pytest", args...)
+	p, err := subprocess.New(ctx, "pytest", args...).
+		CaptureStderrLines().
+		CaptureStdoutLines().
+		SetEnv("PYTHONUNBUFFERED", "1").
+		Start()
 	if err != nil {
 		return err
 	}
@@ -47,7 +50,7 @@ func Run(ctx context.Context, args ...string) error {
 func mapStderrLines(ch <-chan string) {
 	red := color.New(color.FgRed)
 	for line := range ch {
-		red.Print(line)
+		red.Print(line, "\n")
 	}
 	os.Stdout.Sync()
 }
@@ -63,7 +66,7 @@ func mapStdoutLines(ch <-chan string) {
 				file = ""
 				os.Stdout.WriteString("\n")
 			}
-			green.Print(line)
+			green.Print(line, "\n")
 		} else {
 			if m["file"] != file {
 				if file != "" {

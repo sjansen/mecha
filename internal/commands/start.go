@@ -183,7 +183,10 @@ func startProcs(ctx context.Context, screen *tui.StackedTextViews, filename stri
 	sort.Strings(keys)
 
 	for _, k := range keys {
-		p, err := subprocess.Run(ctx, "sh", "-c", procs[k])
+		p, err := subprocess.New(ctx, "sh", "-c", procs[k]).
+			CaptureStdoutLines().
+			CaptureStderrLines().
+			Start()
 		if err != nil {
 			return err
 		}
