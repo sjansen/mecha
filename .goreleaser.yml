@@ -1,9 +1,10 @@
-archive:
+archives:
+- id: default
   format_overrides:
     - goos: windows
       format: zip
-brew:
-  github:
+brews:
+- github:
     owner: sjansen
     name: homebrew-mecha
   commit_author:
@@ -25,8 +26,8 @@ changelog:
     - '^docs:'
     - '^test:'
     - '.*'
-nfpm:
-  bindir: /usr/bin
+nfpms:
+- bindir: /usr/bin
   formats:
   - deb
   - rpm
