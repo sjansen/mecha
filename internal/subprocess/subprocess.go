@@ -3,7 +3,6 @@ package subprocess
 import (
 	"bufio"
 	"context"
-	"fmt"
 	"io"
 	"os/exec"
 	"syscall"
@@ -76,7 +75,6 @@ func makeLineChannel(r io.Reader) <-chan string {
 			case err == nil:
 				ch <- line
 			case err == io.EOF:
-				fmt.Println("EOF")
 				ch <- line
 				return
 			default:
