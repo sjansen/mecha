@@ -34,8 +34,8 @@ func (cmd *pytestCmd) register(app *kingpin.Application) {
 var testcase = regexp.MustCompile(
 	`^(?P<file>.+?)::` +
 		`(?P<tc>.+)[\s]+` +
-		`(?P<result>(?:PASS|FAIL)[^\s]+)[\s]+` +
-		`(....%.)?$`,
+		`(?P<result>(?:PASS|FAIL)[^\s]+)` +
+		`[\s]*(....%.)?$`,
 )
 
 func (cmd *pytestCmd) run(pc *kingpin.ParseContext) error {
@@ -61,7 +61,7 @@ func (cmd *pytestCmd) run(pc *kingpin.ParseContext) error {
 		defer wg.Done()
 		red := color.New(color.FgRed)
 		for line := range p.Stderr {
-			red.Print(line, "\n")
+			red.Print(line)
 		}
 		os.Stdout.Sync()
 	}()
@@ -77,7 +77,7 @@ func (cmd *pytestCmd) run(pc *kingpin.ParseContext) error {
 					testfile = ""
 					os.Stdout.WriteString("\n")
 				}
-				green.Print(line, "\n")
+				green.Print(line)
 			} else {
 				if match[1] != testfile {
 					if testfile != "" {

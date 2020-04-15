@@ -1,7 +1,10 @@
 package subprocess
 
 import (
+	"bufio"
 	"context"
+	"fmt"
+	"io"
 	"os/exec"
 	"syscall"
 )
@@ -18,29 +21,38 @@ type Subprocess struct {
 	Stderr <-chan string
 }
 
-func Run(ctx context.Context, name string, args ...string) (p *Subprocess, err error) {
-	b1 := &lineBuffer{}
-	b2 := &lineBuffer{}
-	es := make(chan *ExitStatus)
-	p = &Subprocess{
-		Stdout: b1.Subscribe(),
-		Stderr: b2.Subscribe(),
-		Status: es,
-	}
-
+func Run(ctx context.Context, name string, args ...string) (*Subprocess, error) {
 	cmd := exec.CommandContext(ctx, name, args...)
-	cmd.Stdout = b1
-	cmd.Stderr = b2
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-	if err = cmd.Start(); err != nil {
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return nil, err
+	}
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
 		return nil, err
 	}
 
-	p.PID = cmd.Process.Pid
+	es := make(chan *ExitStatus)
+	p := &Subprocess{
+		Stdout: makeLineChannel(stdout),
+		Stderr: makeLineChannel(stderr),
+		Status: es,
+	}
+
+	pid, err := waitForCommand(cmd, es)
+	p.PID = pid
+
+	return p, err
+}
+
+func waitForCommand(cmd *exec.Cmd, es chan<- *ExitStatus) (int, error) {
+	if err := cmd.Start(); err != nil {
+		return 0, err
+	}
 	go func() {
+		defer close(es)
 		err := cmd.Wait()
-		b1.Close()
-		b2.Close()
 		if err == nil {
 			es <- &ExitStatus{}
 		} else {
@@ -50,6 +62,27 @@ func Run(ctx context.Context, name string, args ...string) (p *Subprocess, err e
 			}
 		}
 	}()
+	return cmd.Process.Pid, nil
+}
 
-	return
+func makeLineChannel(r io.Reader) <-chan string {
+	ch := make(chan string)
+	go func() {
+		defer close(ch)
+		reader := bufio.NewReader(r)
+		for {
+			line, err := reader.ReadString('\n')
+			switch {
+			case err == nil:
+				ch <- line
+			case err == io.EOF:
+				fmt.Println("EOF")
+				ch <- line
+				return
+			default:
+				return
+			}
+		}
+	}()
+	return ch
 }
