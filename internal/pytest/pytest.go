@@ -35,33 +35,31 @@ func Run(ctx context.Context, args ...string) error {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		mapStderrLines(p.Stderr)
-	}()
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		mapStdoutLines(p.Stdout)
+		stdout := p.Stdout
+		stderr := p.Stderr
+		h := newDefaultLineHandler()
+		for {
+			select {
+			case line, ok := <-stdout:
+				h.onStdoutLine(line)
+				if !ok {
+					stdout = nil
+				}
+			case line, ok := <-stderr:
+				h.onStderrLine(line)
+				if !ok {
+					stderr = nil
+				}
+			}
+			if stdout == nil && stderr == nil {
+				break
+			}
+		}
 	}()
 
 	wg.Wait()
 	status := <-p.Status
 	return status.Error
-}
-
-func mapStderrLines(ch <-chan string) {
-	red := color.New(color.FgRed)
-	for line := range ch {
-		red.Print(line, "\n")
-	}
-	os.Stdout.Sync()
-}
-
-func mapStdoutLines(ch <-chan string) {
-	h := newDefaultLineHandler()
-	for line := range ch {
-		h.onStdoutLine(line)
-	}
 }
 
 func matchLine(line string) map[string]string {
@@ -81,6 +79,7 @@ func matchLine(line string) map[string]string {
 
 type defaultLineHandler struct {
 	green    *color.Color
+	red      *color.Color
 	start    time.Time
 	file     string
 	progress string
@@ -89,8 +88,14 @@ type defaultLineHandler struct {
 func newDefaultLineHandler() *defaultLineHandler {
 	return &defaultLineHandler{
 		green: color.New(color.FgGreen),
+		red:   color.New(color.FgRed),
 		start: time.Now(),
 	}
+}
+
+func (h *defaultLineHandler) onStderrLine(l string) {
+	h.red.Print(l, "\n")
+	os.Stdout.Sync()
 }
 
 func (h *defaultLineHandler) onStdoutLine(l string) {
