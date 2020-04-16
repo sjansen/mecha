@@ -9,12 +9,13 @@ def test__b__2():
     assert 'a' == 'b'
 
 
-def test__b__3():
+def test__b__3(invalid):
     sleep(0.25)
 
 
 def test__b__4():
     sleep(0.25)
+    raise NotImplemented
 
 
 def test__b__5():

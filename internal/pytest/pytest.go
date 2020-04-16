@@ -15,8 +15,8 @@ import (
 var testcase = regexp.MustCompile(
 	`^(?P<file>.+?)::` +
 		`(?P<test>.+)[\s]+` +
-		`(?P<result>(?:PASS|FAIL)[^\s]+)` +
-		`[\s]*(?P<progress>....%.)?$`,
+		`(?P<result>(?:PASS|ERROR|FAIL|SKIP|XFAIL)[^\s]*)` +
+		`[\s]*(?P<progress>\[.*?\])?$`,
 )
 
 func Run(ctx context.Context, args ...string) error {
@@ -121,10 +121,19 @@ func (h *defaultLineHandler) writeMatchedLine(m map[string]string) {
 		os.Stdout.WriteString(h.file)
 		os.Stdout.WriteString("  ")
 	}
-	if m["result"] == "PASSED" {
+	switch m["result"] {
+	case "PASSED":
 		os.Stdout.WriteString(".")
-	} else {
+	case "ERROR":
+		os.Stdout.WriteString("E")
+	case "FAILED":
 		os.Stdout.WriteString("F")
+	case "SKIPPED":
+		os.Stdout.WriteString("s")
+	case "XFAIL":
+		os.Stdout.WriteString("x")
+	default:
+		os.Stdout.WriteString("?")
 	}
 	h.progress = m["progress"]
 }
