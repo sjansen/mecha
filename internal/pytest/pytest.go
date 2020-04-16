@@ -2,9 +2,11 @@ package pytest
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"regexp"
 	"sync"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/sjansen/mecha/internal/subprocess"
@@ -56,38 +58,9 @@ func mapStderrLines(ch <-chan string) {
 }
 
 func mapStdoutLines(ch <-chan string) {
-	green := color.New(color.FgGreen)
-
-	var file, progress string
+	h := newDefaultLineHandler()
 	for line := range ch {
-		m := matchLine(line)
-		if m == nil {
-			if file != "" {
-				file = ""
-				os.Stdout.WriteString("\n")
-			}
-			green.Print(line, "\n")
-		} else {
-			if m["file"] != file {
-				if file != "" {
-					os.Stdout.WriteString("\n")
-				}
-				if progress != "" {
-					os.Stdout.WriteString(progress)
-					os.Stdout.WriteString("  ")
-				}
-				file = m["file"]
-				os.Stdout.WriteString(file)
-				os.Stdout.WriteString("  ")
-			}
-			if m["result"] == "PASSED" {
-				os.Stdout.WriteString(".")
-			} else {
-				os.Stdout.WriteString("F")
-			}
-			progress = m["progress"]
-			os.Stdout.Sync()
-		}
+		h.onStdoutLine(line)
 	}
 }
 
@@ -104,4 +77,59 @@ func matchLine(line string) map[string]string {
 		}
 	}
 	return result
+}
+
+type defaultLineHandler struct {
+	green    *color.Color
+	start    time.Time
+	file     string
+	progress string
+}
+
+func newDefaultLineHandler() *defaultLineHandler {
+	return &defaultLineHandler{
+		green: color.New(color.FgGreen),
+		start: time.Now(),
+	}
+}
+
+func (h *defaultLineHandler) onStdoutLine(l string) {
+	m := matchLine(l)
+	if m != nil {
+		h.writeMatchedLine(m)
+	} else {
+		h.writeUnmatchedLine(l)
+	}
+	os.Stdout.Sync()
+}
+
+func (h *defaultLineHandler) writeMatchedLine(m map[string]string) {
+	if m["file"] != h.file {
+		if h.file != "" {
+			os.Stdout.WriteString("\n")
+		}
+		if h.progress != "" {
+			os.Stdout.WriteString(h.progress)
+			os.Stdout.WriteString("  ")
+		}
+		h.file = m["file"]
+		os.Stdout.WriteString(h.file)
+		os.Stdout.WriteString("  ")
+	}
+	if m["result"] == "PASSED" {
+		os.Stdout.WriteString(".")
+	} else {
+		os.Stdout.WriteString("F")
+	}
+	h.progress = m["progress"]
+}
+
+func (h *defaultLineHandler) writeUnmatchedLine(line string) {
+	if h.file != "" {
+		h.file = ""
+		os.Stdout.WriteString("\n")
+	}
+	elapsed := time.Since(h.start).Truncate(time.Second)
+	fmt.Fprintf(os.Stdout, "% 9s  ", elapsed.String())
+	h.green.Fprint(os.Stdout, line, "\n")
 }
