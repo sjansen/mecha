@@ -1,6 +1,5 @@
-*
-!*/
-!*.*
-!test-harness
-*.exe
-.*.sw[op]
+*/*
+!*/*.*
+!*/test-harness
+*/*.exe
+*/.*.sw[op]

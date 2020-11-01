@@ -7,27 +7,23 @@ env:
 services:
   - docker
 
-cache:
-  directories:
-    - $GOPATH/pkg/mod
-
 before_script:
   - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - '[[ -n "$CC_TEST_REPORTER_ID" ]] && ./cc-test-reporter before-build'
 
 script:
-  - go get
-  - fossa analyze
+  - go mod download
+  - '[[ -n "$FOSSA_API_KEY" ]] && fossa analyze'
   - docker-compose --version
   - docker-compose build --pull go
   - docker-compose up --abort-on-container-exit --exit-code-from=go --force-recreate
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - '[[ -n "$CC_TEST_REPORTER_ID" ]] && ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT'
 
 after_success:
   - mv dist/coverage.txt coverage.txt
   - bash <(curl -s https://codecov.io/bash)
-  - fossa test --timeout 300
+  - '[[ -n "$FOSSA_API_KEY" ]] && fossa test --timeout 300'

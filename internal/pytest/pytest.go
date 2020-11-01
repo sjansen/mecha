@@ -94,6 +94,7 @@ func newDefaultLineHandler() *defaultLineHandler {
 }
 
 func (h *defaultLineHandler) onStderrLine(l string) {
+	h.writeElapsedTime()
 	h.red.Print(l, "\n")
 	os.Stdout.Sync()
 }
@@ -106,6 +107,11 @@ func (h *defaultLineHandler) onStdoutLine(l string) {
 		h.writeUnmatchedLine(l)
 	}
 	os.Stdout.Sync()
+}
+
+func (h *defaultLineHandler) writeElapsedTime() {
+	elapsed := time.Since(h.start).Truncate(time.Second)
+	fmt.Fprintf(os.Stdout, "% 9s  ", elapsed.String())
 }
 
 func (h *defaultLineHandler) writeMatchedLine(m map[string]string) {
@@ -143,7 +149,6 @@ func (h *defaultLineHandler) writeUnmatchedLine(line string) {
 		h.file = ""
 		os.Stdout.WriteString("\n")
 	}
-	elapsed := time.Since(h.start).Truncate(time.Second)
-	fmt.Fprintf(os.Stdout, "% 9s  ", elapsed.String())
+	h.writeElapsedTime()
 	h.green.Fprint(os.Stdout, line, "\n")
 }

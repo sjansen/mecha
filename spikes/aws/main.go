@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 
-	"github.com/knq/ini"
+	"github.com/kenshaw/ini"
 )
 
 func die(err error) {

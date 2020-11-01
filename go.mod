@@ -20,8 +20,8 @@ require (
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/dustin/go-humanize v1.0.0
-	github.com/fatih/color v1.7.0
-	github.com/gdamore/tcell v1.3.0
+	github.com/fatih/color v1.10.0
+	github.com/gdamore/tcell/v2 v2.0.1-0.20201017141208-acf90d56d591
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/gogo/protobuf v1.2.0 // indirect
 	github.com/golang/protobuf v1.3.2
@@ -30,17 +30,14 @@ require (
 	github.com/gorilla/context v1.1.1 // indirect
 	github.com/gorilla/mux v1.6.2 // indirect
 	github.com/hashicorp/hcl v1.0.0
-	github.com/knq/ini v0.0.0-20191206014339-58b5e74713e0
+	github.com/kenshaw/ini v0.5.0
 	github.com/kr/fs v0.1.0 // indirect
-	github.com/mattn/go-colorable v0.0.9 // indirect
-	github.com/mattn/go-isatty v0.0.4 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
 	github.com/opencontainers/image-spec v1.0.1 // indirect
 	github.com/pkg/sftp v1.8.3
-	github.com/rivo/tview v0.0.0-20200404204604-ca37f83cb2e7
-	github.com/shirou/gopsutil v2.20.3+incompatible
+	github.com/rivo/tview v0.0.0-20201018122409-d551c850a743
+	github.com/shirou/gopsutil v2.20.10-0.20201029195208-f810d518bb55+incompatible
 	github.com/sirupsen/logrus v1.3.0 // indirect
 	github.com/sjansen/watchman v0.1.0
 	github.com/stretchr/testify v1.4.0
@@ -49,9 +46,10 @@ require (
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1
-	golang.org/x/crypto v0.0.0-20191010185427-af544f31c8ac
-	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
-	golang.org/x/sys v0.0.0-20200413165638-669c56c373c4 // indirect
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+	golang.org/x/net v0.0.0-20201031054903-ff519b6c9102
+	golang.org/x/sys v0.0.0-20201029080932-201ba4db2418 // indirect
+	golang.org/x/text v0.3.4 // indirect
 	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 	google.golang.org/grpc v1.19.0

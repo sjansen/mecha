@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/knq/ini"
+	"github.com/kenshaw/ini"
 )
 
 func FindProjectRoot(dir string) (root string, err error) {

@@ -74,7 +74,8 @@ func startClient(msg string) {
 
 	r, err := c.Translate(ctx, &pb.Original{Msg: msg})
 	if err != nil {
-		log.Fatalf("could not translate: %v", err)
+		log.Printf("could not translate: %v", err)
+		return
 	}
 	fmt.Printf("%s\t→ %s\n", msg, r.Msg)
 }
