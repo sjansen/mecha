@@ -18,13 +18,13 @@ local name = 'World';
 func main() {
 	vm := jsonnet.MakeVM()
 	vm.ErrorFormatter.SetColorFormatter(color.New(color.FgRed).Fprintf)
-	if output, err := vm.EvaluateSnippet("<stdin>", input); err != nil {
+	if output, err := vm.EvaluateAnonymousSnippet("<stdin>", input); err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(output)
 	}
 	input = `std.manifestIni({main:` + input + `, sections:{}})`
-	if output, err := vm.EvaluateSnippet("<stdin>", input); err != nil {
+	if output, err := vm.EvaluateAnonymousSnippet("<stdin>", input); err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(output)

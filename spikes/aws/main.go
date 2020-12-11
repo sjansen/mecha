@@ -1,11 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/aws/external"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 
 	"github.com/kenshaw/ini"
@@ -20,7 +21,7 @@ func filename() string {
 	if filename := os.Getenv("AWS_SHARED_CREDENTIALS_FILE"); len(filename) != 0 {
 		return filename
 	}
-	return external.DefaultSharedCredentialsFilename()
+	return config.DefaultSharedCredentialsFilename()
 }
 
 func main() {
@@ -31,22 +32,23 @@ func main() {
 		die(err)
 	}
 
+	ctx := context.Background()
+
 	for _, profile := range cfg.SectionNames() {
 		section := cfg.GetSection(profile)
 		if kid := section.Get("aws_access_key_id"); kid == "" {
 			continue
 		}
 
-		cfg, err := external.LoadDefaultAWSConfig(
-			external.WithSharedConfigProfile(profile),
+		cfg, err := config.LoadDefaultConfig(
+			config.WithSharedConfigProfile(profile),
 		)
 		if err != nil {
 			die(err)
 		}
 
-		svc := iam.New(cfg)
-		req := svc.ListAccessKeysRequest(&iam.ListAccessKeysInput{})
-		result, err := req.Send()
+		svc := iam.NewFromConfig(cfg)
+		result, err := svc.ListAccessKeys(ctx, &iam.ListAccessKeysInput{})
 		if err != nil {
 			die(err)
 		}
@@ -54,8 +56,8 @@ func main() {
 		fmt.Println(profile)
 		for _, metadata := range result.AccessKeyMetadata {
 			fmt.Printf("\taccess_key_id:\t%s\n\tusername:\t%s\n\tstatus:\t\t%s\n\tcreated:\t%s\n\n",
-				aws.StringValue(metadata.AccessKeyId),
-				aws.StringValue(metadata.UserName),
+				aws.ToString(metadata.AccessKeyId),
+				aws.ToString(metadata.UserName),
 				metadata.Status,
 				metadata.CreateDate,
 			)

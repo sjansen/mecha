@@ -30,7 +30,7 @@ func main() {
 
 func makeSomeNoise() {
 	pid := os.Getpid()
-	fmt.Printf("%2d: Started (pid=%d)\n", id, pid)
+	fmt.Printf("Started (id=%-2d pid=%d)\n", id, pid)
 
 	rand.Seed(int64(id))
 	n := rand.Intn(12) + 3
@@ -38,17 +38,18 @@ func makeSomeNoise() {
 
 	n = rand.Intn(7)
 	if n < 5 {
-		fmt.Printf("%2d: Stopped (pid=%d)\n", id, pid)
+		fmt.Printf("Stopped (id=%-2d pid=%d)\n", id, pid)
 		os.Exit(0)
 	} else {
-		fmt.Printf("%2d: Crashed (pid=%d)\n", id, pid)
+		fmt.Printf("Crashed (id=%-2d pid=%d)\n", id, pid)
 		os.Exit(1)
 	}
 
 }
 
 func spawn(ctx context.Context, i int) int {
-	p, err := subprocess.New(ctx, os.Args[0], "--as-test-child", strconv.Itoa(i)).
+	id := strconv.Itoa(i)
+	p, err := subprocess.New(ctx, os.Args[0], "--as-test-child", id).
 		CaptureStdoutLines().
 		CaptureStderrLines().
 		Start()
@@ -57,14 +58,17 @@ func spawn(ctx context.Context, i int) int {
 		return -1
 	}
 
+	label := fmt.Sprintf("%3s:", id)
 	for {
 		select {
 		case line := <-p.Stdout:
-			os.Stdout.Write([]byte(line))
-			os.Stdout.Write([]byte("\n"))
+			if line != "" {
+				fmt.Fprintln(os.Stdout, label, line)
+			}
 		case line := <-p.Stderr:
-			os.Stderr.Write([]byte(line))
-			os.Stderr.Write([]byte("\n"))
+			if line != "" {
+				fmt.Fprintln(os.Stderr, label, line)
+			}
 		case status := <-p.Status:
 			return status.Code
 		}
@@ -74,7 +78,7 @@ func spawn(ctx context.Context, i int) int {
 func startChildren() {
 	var wg sync.WaitGroup
 
-	start := 50
+	start := 10
 	var crashed, stopped, restarted int
 	ctx, cancel := context.WithTimeout(context.Background(), 16*time.Second)
 	defer cancel()

@@ -12,8 +12,8 @@ import (
 
 func main() {
 	env, err := cel.NewEnv(cel.Declarations(
-		decls.NewIdent("name", decls.String, nil),
-		decls.NewIdent("group", decls.String, nil),
+		decls.NewConst("name", decls.String, nil),
+		decls.NewVar("group", decls.String),
 	))
 	if err != nil {
 		log.Fatalf("env construction error: %s", err)

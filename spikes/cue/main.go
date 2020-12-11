@@ -17,7 +17,7 @@ func main() {
 
 	var r cue.Runtime
 
-	instance, err := r.Parse("test", config)
+	instance, err := r.Compile("test", config)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
