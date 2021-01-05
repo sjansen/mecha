@@ -26,6 +26,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.10.0
 	github.com/gdamore/tcell/v2 v2.0.1-0.20201017141208-acf90d56d591
+	github.com/go-git/go-git/v5 v5.2.0
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/golang/protobuf v1.4.3
 	github.com/google/cel-go v0.6.0
@@ -42,6 +43,7 @@ require (
 	github.com/rivo/tview v0.0.0-20201204190810-5406288b8e4e
 	github.com/shirou/gopsutil v3.20.11+incompatible
 	github.com/sjansen/watchman v0.1.0
+	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.6.1
 	github.com/tklauser/go-sysconf v0.0.0-20200125124152-4f5f1f2b970a
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
@@ -57,7 +59,6 @@ require (
 	google.golang.org/genproto v0.0.0-20201210142538-e3217bee35cc // indirect
 	google.golang.org/grpc v1.34.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
-	gopkg.in/src-d/go-git.v4 v4.13.1
 	gotest.tools v2.2.0+incompatible // indirect
 )
 
