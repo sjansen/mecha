@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"cuelang.org/go/cue"
+	"cuelang.org/go/cue/cuecontext"
 )
 
 // https://cuelang.org/
@@ -15,19 +15,9 @@ func main() {
 	place: "world"
 	`
 
-	var r cue.Runtime
-
-	instance, err := r.Compile("test", config)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(1)
-	}
-
-	str, err := instance.Lookup("msg").String()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(1)
-	}
+	ctx := cuecontext.New()
+	v := ctx.CompileString(config)
+	str := v.LookupPath(cue.ParsePath("msg"))
 
 	fmt.Println(str)
 }

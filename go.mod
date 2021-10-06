@@ -1,65 +1,100 @@
 module github.com/sjansen/mecha
 
 require (
-	cuelang.org/go v0.2.2
-	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
+	cuelang.org/go v0.4.0
 	github.com/Masterminds/semver v1.5.0
-	github.com/Microsoft/go-winio v0.4.16 // indirect
-	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
-	github.com/alecthomas/units v0.0.0-20201120081800-1786d5ef83d4 // indirect
 	github.com/aws/aws-sdk-go v1.36.6
-	github.com/aws/aws-sdk-go-v2 v0.30.0
-	github.com/aws/aws-sdk-go-v2/config v0.3.0
-	github.com/aws/aws-sdk-go-v2/service/iam v0.30.0
+	github.com/aws/aws-sdk-go-v2 v1.9.1
+	github.com/aws/aws-sdk-go-v2/config v1.8.2
+	github.com/aws/aws-sdk-go-v2/service/iam v1.10.0
 	github.com/beevik/ntp v0.3.0
-	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
-	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
-	github.com/containerd/containerd v1.3.3 // indirect
-	github.com/creack/pty v1.1.11
+	github.com/creack/pty v1.1.16
 	github.com/davecgh/go-spew v1.1.1
-	github.com/docker/distribution v2.7.1+incompatible // indirect
-	github.com/docker/docker v1.4.2-0.20200309214505-aa6a9891b09c
-	github.com/docker/go-connections v0.4.0 // indirect
-	github.com/docker/go-units v0.4.0 // indirect
+	github.com/docker/docker v20.10.9+incompatible
 	github.com/dustin/go-humanize v1.0.0
-	github.com/fatih/color v1.10.0
-	github.com/gdamore/tcell/v2 v2.0.1-0.20201017141208-acf90d56d591
-	github.com/go-git/go-git/v5 v5.2.0
-	github.com/go-ole/go-ole v1.2.4 // indirect
-	github.com/golang/protobuf v1.4.3
-	github.com/google/cel-go v0.6.0
+	github.com/fatih/color v1.13.0
+	github.com/gdamore/tcell/v2 v2.4.1-0.20210905002822-f057f0a857a1
+	github.com/go-git/go-git/v5 v5.4.2
+	github.com/golang/protobuf v1.5.2
+	github.com/google/cel-go v0.8.0
 	github.com/google/go-jsonnet v0.17.0
-	github.com/gorilla/context v1.1.1 // indirect
-	github.com/gorilla/mux v1.6.2 // indirect
 	github.com/hashicorp/hcl v1.0.0
-	github.com/kenshaw/ini v0.5.0
-	github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 // indirect
-	github.com/morikuni/aec v1.0.0 // indirect
-	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
-	github.com/opencontainers/image-spec v1.0.1 // indirect
-	github.com/pkg/sftp v1.12.0
-	github.com/rivo/tview v0.0.0-20201204190810-5406288b8e4e
-	github.com/shirou/gopsutil v3.20.11+incompatible
+	github.com/kenshaw/ini v0.5.1
+	github.com/pkg/sftp v1.13.4
+	github.com/rivo/tview v0.0.0-20211001102648-5508f4b00266
+	github.com/shirou/gopsutil v3.21.9+incompatible
 	github.com/sjansen/watchman v0.1.0
-	github.com/stretchr/objx v0.2.0 // indirect
-	github.com/stretchr/testify v1.6.1
-	github.com/tklauser/go-sysconf v0.0.0-20200125124152-4f5f1f2b970a
-	github.com/xanzy/ssh-agent v0.3.0 // indirect
+	github.com/stretchr/testify v1.7.0
+	github.com/tklauser/go-sysconf v0.3.9
 	go.starlark.net v0.0.0-20190109175711-d21d424e7da2
-	go.uber.org/multierr v1.6.0 // indirect
-	go.uber.org/zap v1.16.0
-	golang.org/x/crypto v0.0.0-20201208171446-5f87f3452ae9
-	golang.org/x/mod v0.4.0 // indirect
-	golang.org/x/net v0.0.0-20201209123823-ac852fbbde11
-	golang.org/x/sys v0.0.0-20201211002650-1f0c578a6b29 // indirect
-	golang.org/x/text v0.3.4 // indirect
-	golang.org/x/tools v0.0.0-20201211025543-abf6a1d87e11 // indirect
-	google.golang.org/genproto v0.0.0-20201210142538-e3217bee35cc // indirect
-	google.golang.org/grpc v1.34.0
+	go.uber.org/zap v1.19.1
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
+	golang.org/x/net v0.0.0-20211005215030-d2e5035098b3
+	google.golang.org/grpc v1.41.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
-	gotest.tools v2.2.0+incompatible // indirect
 )
 
-go 1.13
+require (
+	github.com/Microsoft/go-winio v0.5.0 // indirect
+	github.com/ProtonMail/go-crypto v0.0.0-20210920160938-87db9fbc61c7 // indirect
+	github.com/StackExchange/wmi v1.2.1 // indirect
+	github.com/acomagu/bufpipe v1.0.3 // indirect
+	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
+	github.com/alecthomas/units v0.0.0-20210927113745-59d0afb8317a // indirect
+	github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20210826220005-b48c857c3a0e // indirect
+	github.com/aws/aws-sdk-go-v2/credentials v1.4.2 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.5.1 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/ini v1.2.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.3.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.4.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.7.1 // indirect
+	github.com/aws/smithy-go v1.8.0 // indirect
+	github.com/cockroachdb/apd/v2 v2.0.1 // indirect
+	github.com/containerd/containerd v1.5.7 // indirect
+	github.com/docker/distribution v2.7.1+incompatible // indirect
+	github.com/docker/go-connections v0.4.0 // indirect
+	github.com/docker/go-units v0.4.0 // indirect
+	github.com/emirpasic/gods v1.12.0 // indirect
+	github.com/gdamore/encoding v1.0.0 // indirect
+	github.com/go-git/gcfg v1.5.0 // indirect
+	github.com/go-git/go-billy/v5 v5.3.1 // indirect
+	github.com/go-ole/go-ole v1.2.5 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/google/uuid v1.2.0 // indirect
+	github.com/imdario/mergo v0.3.12 // indirect
+	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/kevinburke/ssh_config v1.1.0 // indirect
+	github.com/kr/fs v0.1.0 // indirect
+	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
+	github.com/mattn/go-colorable v0.1.11 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-runewidth v0.0.13 // indirect
+	github.com/mitchellh/go-homedir v1.1.0 // indirect
+	github.com/morikuni/aec v1.0.0 // indirect
+	github.com/mpvl/unique v0.0.0-20150818121801-cbe035fff7de // indirect
+	github.com/opencontainers/go-digest v1.0.0 // indirect
+	github.com/opencontainers/image-spec v1.0.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/stoewer/go-strcase v1.2.0 // indirect
+	github.com/stretchr/objx v0.3.0 // indirect
+	github.com/tklauser/numcpus v0.3.0 // indirect
+	github.com/xanzy/ssh-agent v0.3.1 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
+	go.uber.org/multierr v1.7.0 // indirect
+	golang.org/x/sys v0.0.0-20211004093028-2c5d950f24ef // indirect
+	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
+	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/genproto v0.0.0-20211005153810-c76a74d43a8e // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/warnings.v0 v0.1.2 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+)
+
+go 1.17

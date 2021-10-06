@@ -41,10 +41,14 @@ func main() {
 		}
 
 		cfg, err := config.LoadDefaultConfig(
-			config.WithSharedConfigProfile(profile),
+			ctx, config.WithSharedConfigProfile(profile),
 		)
 		if err != nil {
 			die(err)
+		}
+
+		if cfg.Region == "" {
+			cfg.Region = "us-east-1"
 		}
 
 		svc := iam.NewFromConfig(cfg)
