@@ -14,9 +14,3 @@ repos:
       entry: golangci-lint run
       pass_filenames: false
       types: [go]
-   -  id: revive
-      name: revive
-      language: system
-      entry: revive -exclude ./vendor/... ./...
-      pass_filenames: false
-      types: [go]
