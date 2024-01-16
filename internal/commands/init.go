@@ -1,11 +1,10 @@
 package commands
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/alecthomas/kingpin/v2"
 )
 
 type initCmd struct{}
@@ -26,7 +25,7 @@ func (cmd *initCmd) run(pc *kingpin.ParseContext) (err error) {
 	}
 
 	filename := filepath.Join(".mecha", "config")
-	if err = ioutil.WriteFile(filename, []byte(template), os.ModePerm); err != nil {
+	if err = os.WriteFile(filename, []byte(template), os.ModePerm); err != nil {
 		return
 	}
 

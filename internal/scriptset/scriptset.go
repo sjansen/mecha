@@ -4,14 +4,9 @@ import (
 	"fmt"
 	"io"
 
-	"go.starlark.net/resolve"
 	"go.starlark.net/starlark"
+	"go.starlark.net/syntax"
 )
-
-func init() {
-	resolve.AllowFloat = true
-	resolve.AllowSet = true
-}
 
 type ScriptSet struct {
 	globals starlark.StringDict
@@ -33,7 +28,10 @@ func New() *ScriptSet {
 }
 
 func (set *ScriptSet) Add(filename string, r io.Reader) error {
-	if _, err := starlark.ExecFile(set.thread, filename, r, set.globals); err != nil {
+	opts := &syntax.FileOptions{
+		Set: true,
+	}
+	if _, err := starlark.ExecFileOptions(opts, set.thread, filename, r, set.globals); err != nil {
 		return err
 	}
 	return nil
@@ -59,10 +57,12 @@ func (set *ScriptSet) cmd(
 }
 
 // script(
-//   name,
-//   steps,
-//   check=None,
-//   recover=None,
+//
+//	name,
+//	steps,
+//	check=None,
+//	recover=None,
+//
 // )
 func (set *ScriptSet) script(
 	thread *starlark.Thread,

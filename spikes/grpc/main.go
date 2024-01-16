@@ -12,6 +12,7 @@ import (
 	pb "github.com/sjansen/mecha/spikes/grpc/translate"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -62,7 +63,9 @@ func startServer() {
 }
 
 func startClient(msg string) {
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(
+		insecure.NewCredentials(),
+	))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

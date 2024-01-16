@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/alecthomas/kingpin/v2"
 
 	"github.com/sjansen/mecha/internal/commands"
 )

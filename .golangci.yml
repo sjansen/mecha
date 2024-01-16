@@ -7,7 +7,6 @@ run:
 
 linters:
     enable:
-    - deadcode
     - gocritic
     - gocyclo
     - gofmt
@@ -18,10 +17,8 @@ linters:
     - lll
     - megacheck
     - misspell
-    - revive
-    - structcheck
     - typecheck
-    - varcheck
+    - unused
     disable:
     - errcheck  # configurable ignore
     fast: false

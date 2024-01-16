@@ -5,8 +5,8 @@ import (
 	"math"
 	"os"
 
-	"go.starlark.net/resolve"
 	"go.starlark.net/starlark"
+	"go.starlark.net/syntax"
 )
 
 var files = map[string]string{
@@ -42,13 +42,15 @@ func sqrt(
 }
 
 func main() {
-	resolve.AllowFloat = true
+	opts := &syntax.FileOptions{
+		Set: true,
+	}
 
 	globals := starlark.StringDict{
 		"sqrt": starlark.NewBuiltin("sqrt", sqrt),
 	}
 	thread := &starlark.Thread{Load: load}
-	if result, err := starlark.ExecFile(thread, "<stdin>", script, globals); err != nil {
+	if result, err := starlark.ExecFileOptions(opts, thread, "<stdin>", script, globals); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	} else {
 		fmt.Println(result["c"])

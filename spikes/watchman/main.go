@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
@@ -60,7 +59,7 @@ func loop(c *watchman.Client) {
 }
 
 func mkdir() (dir string, err error) {
-	dir, err = ioutil.TempDir("", "watchman-client-test")
+	dir, err = os.MkdirTemp("", "watchman-client-test")
 	if err != nil {
 		return
 	}
@@ -71,7 +70,7 @@ func mkdir() (dir string, err error) {
 	}
 
 	path := filepath.Join(dir, ".watchmanconfig")
-	err = ioutil.WriteFile(path, []byte(`{"idle_reap_age_seconds": 300}`+"\n"), os.ModePerm)
+	err = os.WriteFile(path, []byte(`{"idle_reap_age_seconds": 300}`+"\n"), os.ModePerm)
 	return
 }
 
@@ -102,7 +101,7 @@ func main() {
 
 	for i, basename := range []string{"foo", "bar", "baz"} {
 		filename := filepath.Join(dir, basename)
-		ioutil.WriteFile(filename, []byte{}, os.ModePerm)
+		os.WriteFile(filename, []byte{}, os.ModePerm)
 		time.Sleep(time.Duration(i) * time.Second)
 		os.Remove(filename)
 		time.Sleep(time.Second)

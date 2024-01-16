@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	humanize "github.com/dustin/go-humanize"
-	"github.com/shirou/gopsutil/process"
+	"github.com/dustin/go-humanize"
+	"github.com/shirou/gopsutil/v3/process"
 )
 
 func main() {

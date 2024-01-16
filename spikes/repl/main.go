@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/chzyer/readline"
-	"go.starlark.net/resolve"
 	"go.starlark.net/starlark"
 	"go.starlark.net/syntax"
 )
@@ -19,8 +18,9 @@ var completer = readline.NewPrefixCompleter(
 )
 
 func main() {
-	resolve.AllowFloat = true
-	resolve.AllowSet = true
+	opts := &syntax.FileOptions{
+		Set: true,
+	}
 
 	l, err := readline.NewEx(&readline.Config{
 		AutoComplete:           completer,
@@ -71,7 +71,8 @@ LOOP:
 
 		_, err = syntax.ParseExpr("<stdin>", line, 0)
 		if err != nil {
-			if globals, err := starlark.ExecFile(thread, "<stdin>", buffer, predeclared); err != nil {
+			globals, err := starlark.ExecFileOptions(opts, thread, "<stdin>", buffer, predeclared)
+			if err != nil {
 				fmt.Println(err)
 			} else {
 				for k, v := range globals {
@@ -79,7 +80,7 @@ LOOP:
 				}
 			}
 		} else {
-			if v, err := starlark.Eval(thread, "<stdin>", buffer, predeclared); err != nil {
+			if v, err := starlark.EvalOptions(opts, thread, "<stdin>", buffer, predeclared); err != nil {
 				fmt.Println(err.Error())
 			} else {
 				fmt.Println(v.String())

@@ -8,11 +8,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/beevik/ntp"
-	humanize "github.com/dustin/go-humanize"
-	"github.com/shirou/gopsutil/disk"
-	"github.com/shirou/gopsutil/mem"
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/dustin/go-humanize"
+	"github.com/shirou/gopsutil/v3/disk"
+	"github.com/shirou/gopsutil/v3/mem"
 
 	"github.com/sjansen/mecha/internal/config"
 	"github.com/sjansen/mecha/internal/fs"

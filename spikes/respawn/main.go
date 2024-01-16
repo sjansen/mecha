@@ -32,7 +32,7 @@ func makeSomeNoise() {
 	pid := os.Getpid()
 	fmt.Printf("Started (id=%-2d pid=%d)\n", id, pid)
 
-	rand.Seed(int64(id))
+	rand := rand.New(rand.NewSource(int64(id)))
 	n := rand.Intn(12) + 3
 	time.Sleep(time.Duration(n) * time.Second)
 

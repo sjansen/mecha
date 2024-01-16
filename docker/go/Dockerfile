@@ -1,4 +1,4 @@
-FROM golang:1.15
+FROM golang:1.21
 
-RUN curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh \
-    | sh -s -- -b $GOPATH/bin v1.33.0
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
+    | sh -s -- -b $(go env GOPATH)/bin v1.55.2

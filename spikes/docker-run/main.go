@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -45,8 +44,10 @@ func main() {
 	defer func() {
 		fmt.Println("--")
 		fmt.Println("cleaning...")
-		wait := 1 * time.Second
-		_ = cli.ContainerStop(ctx, resp.ID, &wait)
+		wait := 1
+		_ = cli.ContainerStop(ctx, resp.ID, container.StopOptions{
+			Timeout: &wait,
+		})
 		_ = cli.ContainerRemove(ctx, resp.ID, types.ContainerRemoveOptions{
 			Force:         true,
 			RemoveLinks:   false,

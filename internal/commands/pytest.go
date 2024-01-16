@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/alecthomas/kingpin/v2"
 
 	"github.com/sjansen/mecha/internal/pytest"
 )

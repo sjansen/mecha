@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/alecthomas/kingpin/v2"
 
 	"github.com/sjansen/mecha/internal/config"
 	"github.com/sjansen/mecha/internal/fs"

@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 
+	"github.com/alecthomas/kingpin/v2"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
@@ -32,7 +31,7 @@ func main() {
 
 	var logger *zap.SugaredLogger
 	if *trace {
-		tmpfile, err := ioutil.TempFile("", "zap-demo")
+		tmpfile, err := os.CreateTemp("", "zap-demo")
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "unable to open trace log:", err)
 		}

@@ -2,7 +2,6 @@ package scriptset
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -40,7 +39,7 @@ func TestScriptParsing(t *testing.T) {
 
 			ext := filepath.Ext(path)
 			path = path[0:len(path)-len(ext)] + ".json"
-			tmp, err := ioutil.ReadFile(path)
+			tmp, err := os.ReadFile(path)
 			require.NoError(err)
 
 			expected := &ScriptSet{}
@@ -53,7 +52,7 @@ func TestScriptParsing(t *testing.T) {
 				actual, err := json.MarshalIndent(scriptset, "", "  ")
 				require.NoError(err)
 
-				f, err := ioutil.TempFile("", "actual.*.json")
+				f, err := os.CreateTemp("", "actual.*.json")
 				require.NoError(err)
 				defer f.Close()
 

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	humanize "github.com/dustin/go-humanize"
-	"github.com/shirou/gopsutil/disk"
+	"github.com/dustin/go-humanize"
+	"github.com/shirou/gopsutil/v3/disk"
 )
 
 func main() {

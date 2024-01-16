@@ -3,3 +3,4 @@
 !*/test-harness
 */*.exe
 */.*.sw[op]
+*/.DS_Store

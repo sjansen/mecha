@@ -26,6 +26,5 @@ func main() {
 		fmt.Println("  RepoDigests: ", img.RepoDigests)
 		fmt.Println("  RepoTags: ", img.RepoTags)
 		fmt.Println("  Size: ", img.Size)
-		fmt.Println("  VirtualSize: ", img.VirtualSize)
 	}
 }
