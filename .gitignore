@@ -1,7 +1,6 @@
 # Directories
+/.vscode/
 /dist/
-/webui/elm-stuff/
-/webui/node_modules/
 .pytest_cache/
 venv/
 

@@ -22,8 +22,11 @@ c = sqrt(float(a*a + b*b))
 `
 
 func load(_ *starlark.Thread, module string) (starlark.StringDict, error) {
+	opts := &syntax.FileOptions{
+		Set: true,
+	}
 	thread := &starlark.Thread{Load: load}
-	globals, err := starlark.ExecFile(thread, module, files[module], nil)
+	globals, err := starlark.ExecFileOptions(opts, thread, module, files[module], nil)
 	return globals, err
 }
 

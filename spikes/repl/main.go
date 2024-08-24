@@ -69,7 +69,7 @@ LOOP:
 		l.SetPrompt(ps1)
 		l.SaveHistory(buffer)
 
-		_, err = syntax.ParseExpr("<stdin>", line, 0)
+		_, err = opts.ParseExpr("<stdin>", line, 0)
 		if err != nil {
 			globals, err := starlark.ExecFileOptions(opts, thread, "<stdin>", buffer, predeclared)
 			if err != nil {

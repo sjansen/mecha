@@ -5,8 +5,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/stdcopy"
 
@@ -20,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	pull, err := cli.ImagePull(ctx, "hello-world", types.ImagePullOptions{})
+	pull, err := cli.ImagePull(ctx, "hello-world", image.PullOptions{})
 	if err != nil {
 		panic(err)
 	}
@@ -48,7 +48,7 @@ func main() {
 		_ = cli.ContainerStop(ctx, resp.ID, container.StopOptions{
 			Timeout: &wait,
 		})
-		_ = cli.ContainerRemove(ctx, resp.ID, types.ContainerRemoveOptions{
+		_ = cli.ContainerRemove(ctx, resp.ID, container.RemoveOptions{
 			Force:         true,
 			RemoveLinks:   false,
 			RemoveVolumes: true,
@@ -59,13 +59,13 @@ func main() {
 
 	fmt.Println("--")
 
-	err = cli.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{})
+	err = cli.ContainerStart(ctx, resp.ID, container.StartOptions{})
 	if err != nil {
 		panic(err)
 	}
 
 	go func() {
-		out, err := cli.ContainerLogs(ctx, resp.ID, types.ContainerLogsOptions{ShowStdout: true})
+		out, err := cli.ContainerLogs(ctx, resp.ID, container.LogsOptions{ShowStdout: true})
 		if err != nil {
 			panic(err)
 		}

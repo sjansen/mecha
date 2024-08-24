@@ -12,11 +12,12 @@ linters:
     - gofmt
     - goimports
     - gosimple
+    - gosimple
     - govet
     - ineffassign
     - lll
-    - megacheck
     - misspell
+    - staticcheck
     - typecheck
     - unused
     disable:

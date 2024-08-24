@@ -63,7 +63,7 @@ func startServer() {
 }
 
 func startClient(msg string) {
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(
 		insecure.NewCredentials(),
 	))
 	if err != nil {
